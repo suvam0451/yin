@@ -1,0 +1,70 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("SUPABASE_DATABASE_CONNECTION_TRANSACTION_POOLER")
+  directUrl = env("SUPABASE_DATABASE_CONNECTION_SESSION_POOLER")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  uuid      String   @id @default(uuid())
+  username  String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // opposite relation fields
+  openaiChatbotPersonas UserOpenaiChatbotPersona[]
+  discordUsers          DiscordUser[]
+
+  @@map("user")
+}
+
+model DiscordUser {
+  id       Int    @id @unique
+  username String
+  avatar   String
+
+  // FK
+  user   User   @relation(fields: [userId], references: [uuid])
+  userId String @map("user_id")
+
+  @@map("discord_user")
+}
+
+model OpenaiChatbotPersona {
+  uuid      String   @id @default(uuid())
+  name      String
+  notes     String?
+  active    Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("openai_chatbot_persona")
+}
+
+model UserOpenaiChatbotPersona {
+  id     Int     @id @default(autoincrement())
+  active Boolean
+
+  // FK
+  user   User   @relation(fields: [userId], references: [uuid])
+  userId String @map("user_id")
+
+  @@map("user_openai_chatbot_persona")
+}
+
+model OpenaiChatbotPersonaInstruction {
+  uuid      String   @id @default(uuid())
+  name      String
+  active    Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("openai_chatbot_persona_instruction")
+}
+
+model discord_guild {
+  id   Int    @unique
+  name String
+}

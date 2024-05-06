@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "@supabase/supabase-js": "^2.43.1",
+    "@vercel/node": "^3.0.28",
+    "discord.js": "^14.15.1",
+    "dotenv": "^16.4.5"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "dev:be": "vercel dev",
+    "migrate": "npx prisma migrate dev --name init",
+    "revert:create": "npx prisma migrate diff --from-url \"SUPABASE_DATABASE_CONNECTION_TRANSACTION_POOLER\" --to-migrations ./prisma/migrations--shadow-database-url $SHADOW_DATABASE_URL --script > backward.sql",
+    "postinstall": "prisma generate"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "prisma": "^5.13.0",
+    "vercel": "^34.1.8"
+  }
+}
