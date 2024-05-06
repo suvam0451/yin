@@ -6,6 +6,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 model User {
@@ -23,7 +24,7 @@ model User {
 }
 
 model DiscordUser {
-  id       Int    @id @unique
+  id       String    @id @unique
   username String
   avatar   String
 
@@ -32,6 +33,13 @@ model DiscordUser {
   userId String @map("user_id")
 
   @@map("discord_user")
+}
+
+model DiscordGuild {
+  id   Int    @unique
+  name String
+
+  @@map("discord_guild")
 }
 
 model OpenaiChatbotPersona {
@@ -62,9 +70,4 @@ model OpenaiChatbotPersonaInstruction {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("openai_chatbot_persona_instruction")
-}
-
-model discord_guild {
-  id   Int    @unique
-  name String
 }

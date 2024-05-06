@@ -1,13 +1,13 @@
-import {REST, Routes, Client, GatewayIntentBits, Message, ChannelType, IntentsBitField} from 'discord.js';
+import {REST, Routes, Client, GatewayIntentBits, Message, ChannelType, IntentsBitField, EmbedBuilder} from 'discord.js';
 import * as dotenv from "dotenv";
+import VercelBackend from "./services/backend.service";
+import {z} from "zod";
 
 dotenv.config({path: './.env'});
 
 const botClientId = process.env.DISCORD_BOT_CLIENT_ID || ""
 const botClientSecret = process.env.DISCORD_BOT_CLIENT_SECRET || ""
 const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || ""
-
-console.log("token", botClientId, botClientSecret);
 
 async function main() {
   const commands = [
@@ -33,14 +33,73 @@ async function main() {
 
 
   bot.on("messageCreate", async (message: Message) => {
-    console.log("received msg")
     if (message.author.bot || message.author.id === botClientId || message.channel.type === ChannelType.DM) return
 
-    await message.reply({
-      content: "I heard yo !!!",
-    });
+    // if(message.mentions.users.first().bot)
+    if (message.mentions.users.first()?.id === botClientId) {
+      if (!message.content.startsWith(`<@${botClientId}>`)) return
+      let mentionRegex = / ?<@(.*?)> ?/g;
+      let prompt = message.content.replaceAll(mentionRegex, "").trim()
+
+      let emojiRegex = / ?<:.*?:.*?> ?/g;
+      prompt = prompt.replaceAll(emojiRegex, "").trim()
+      if (prompt === "") return
+
+      const retval = await VercelBackend.post("/users/chat-prompt", {
+        guildId: message.guildId,
+        userId: message.author.id,
+        userDisplayName: message.author.displayName,
+        username: message.author.username,
+        avatarUrl: message.author.avatar,
+        prompt: prompt
+      });
+      if (!retval?.data?.promptReply) return
+      await message.reply({
+        content: retval?.data?.promptReply
+      })
+    } else {
+      await message.reply({
+        content: "I heard yo !!!",
+      });
+    }
   })
 
+  bot.on("interactionCreate", async (interaction) => {
+    if (interaction.isChatInputCommand()) {
+      const {commandName} = interaction;
+      if (commandName === 'ask') {
+        console.log("asked", interaction)
+        await interaction.reply('Pong!');
+      } else if (commandName === "help") {
+        const exampleEmbed = new EmbedBuilder()
+            .setColor(0x0099FF)
+            .setTitle('About Me')
+            .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+            .setDescription("I am an emotional support chatbot and utility assistant built by @suvam0451")
+            .setAuthor({name: 'Yin', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org'})
+            .setDescription(
+                `
+Hiya, Yin here ^^ 
+
+I am an emotional support bot. I can help you in three simple ways.
+
+1. Ping me in a normal channel and AMA.
+2. Start a chat session, select a persona and talk with me :)
+3. Provide me prompts to generate an image.
+
+That's all <3
+
+Use this link to create/edit your chat personas.
+You can also set my default persona and view/download your images there ^^
+
+https://suvam0451.com
+                `)
+            .setFooter({text: 'v0.1.0 • built with <3 by @suvam0451', iconURL: 'https://i.imgur.com/AfFp7pu.png'});
+
+        await interaction.reply({embeds: [exampleEmbed]});
+      }
+    }
+  })
   await bot.login(botClientToken)
 }
 
