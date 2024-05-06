@@ -1,7 +1,6 @@
-import {REST, Routes, Client, GatewayIntentBits, Message, ChannelType, IntentsBitField, EmbedBuilder} from 'discord.js';
+import {Client, GatewayIntentBits, Message, ChannelType, IntentsBitField, EmbedBuilder} from 'discord.js';
 import * as dotenv from "dotenv";
 import VercelBackend from "./services/backend.service";
-import {z} from "zod";
 
 dotenv.config({path: './.env'});
 
@@ -66,9 +65,8 @@ async function main() {
 
   bot.on("interactionCreate", async (interaction) => {
     if (interaction.isChatInputCommand()) {
-      const {commandName} = interaction;
+      const {commandName, guildId, user} = interaction;
       if (commandName === 'ask') {
-        console.log("asked", interaction)
         await interaction.reply('Pong!');
       } else if (commandName === "help") {
         const exampleEmbed = new EmbedBuilder()
@@ -97,6 +95,45 @@ https://suvam0451.com
             .setFooter({text: 'v0.1.0 • built with <3 by @suvam0451', iconURL: 'https://i.imgur.com/AfFp7pu.png'});
 
         await interaction.reply({embeds: [exampleEmbed]});
+      } else if (commandName === "image") {
+        const userId = user.id
+        const userDisplayName = user.displayName
+        const username = user.username
+        const avatarUrl = user.avatar
+
+        const prompt = interaction.options.get("prompt")?.value
+        const model = interaction.options.get("model")?.value || "dall-e-2"
+        const size = interaction.options.get("size")?.value || "256x256"
+        const quality = interaction.options.get("quality")?.value || "standard"
+
+        try {
+          await interaction.reply('Working on it...');
+          const retval = await VercelBackend.post("/users/image-prompt", {
+            guildId,
+            userId,
+            userDisplayName,
+            username,
+            avatarUrl,
+            prompt,
+            size,
+            model,
+            quality
+          });
+          if (retval) {
+            const exampleEmbed = new EmbedBuilder()
+                .setTitle('Your generated image')
+                .setImage(retval.data.promptReply[0].url);
+
+            await interaction.editReply({embeds: [exampleEmbed]})
+            return
+          } else {
+            await interaction.editReply("We failed to get a reply")
+            return
+          }
+        } catch (e) {
+          await interaction.editReply("Request failed")
+          return
+        }
       }
     }
   })
