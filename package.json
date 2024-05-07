@@ -13,6 +13,7 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "dev:be": "vercel dev",
+    "dev:web": "npm run dev -w @yin/web",
     "migrate": "npx prisma migrate dev --name init",
     "revert:create": "npx prisma migrate diff --from-url \"SUPABASE_DATABASE_CONNECTION_TRANSACTION_POOLER\" --to-migrations ./prisma/migrations--shadow-database-url $SHADOW_DATABASE_URL --script > backward.sql",
     "postinstall": "prisma generate"
@@ -23,5 +24,6 @@
     "prisma": "^5.13.0",
     "vercel": "^34.1.8"
   },
+  "workspaces": ["apps/*"],
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
