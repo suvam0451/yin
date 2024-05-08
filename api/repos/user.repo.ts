@@ -29,15 +29,21 @@ class UserRepository {
     });
   }
 
+  /**
+   *
+   * @param userId
+   * @param username
+   * @param avatarUrl
+   *
+   * @returns user entity
+   */
   static async upsertDiscordUser({
-                                   guildId,
                                    userId,
-                                   userDisplayName,
                                    username, avatarUrl
                                  }: {
-    guildId: string,
+    guildId?: string,
     userId: string,
-    userDisplayName: string,
+    userDisplayName?: string,
     username: string,
     avatarUrl: string
   }) {
@@ -66,6 +72,29 @@ class UserRepository {
         }
       },
     });
+  }
+
+  static async discordUserStoreTokens({discordUserId, accessToken, refreshToken, username, avatar, scope}: {
+    discordUserId: string,
+    accessToken: string,
+    refreshToken: string,
+    username: string,
+    avatar: string,
+    scope: string
+  }) {
+    const prisma = DBClient.getInstance().prisma
+    await prisma.discordUser.update({
+      where: {
+        id: discordUserId
+      },
+      data: {
+        username,
+        accessToken,
+        refreshToken,
+        avatar,
+        scope,
+      },
+    })
   }
 }
 

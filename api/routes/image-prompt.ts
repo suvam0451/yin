@@ -1,4 +1,3 @@
-import {VercelRequest, VercelResponse} from "@vercel/node";
 import {OpenAiImageSizeEnum, OpenAiQualityEnum, OpenAiService} from "../services/openai.service";
 
 import {z} from "zod";

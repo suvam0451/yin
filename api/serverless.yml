@@ -45,10 +45,16 @@ functions:
       - httpApi:
           path: /discord/image-prompt
           method: any
-  userGallery:
+  userResourceRoute:
     handler: routes/user.getGallery
     events:
       - httpApi:
-          path: /user/gallery
+          path: /user/{resource} # gallery
           method: any
+#  discordOAuth:
+#    handler: routes/user.discordOAuth
+#    events:
+#      - httpApi:
+#          path: /user/discord-oauth # discord-oauth
+#          method: POST
 

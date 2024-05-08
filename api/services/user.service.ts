@@ -1,18 +1,41 @@
 import DBClient from "../repos/_client";
-import {successWithData} from "../routes/_utils";
+import {badRequest, successWithData} from "../routes/_utils";
 import {z} from "zod";
+import axios from "axios";
+import {configLazy} from "@yin/discord/services/config.service";
+import DiscordService from "./discord.service";
+import UserRepo from "../repos/user.repo";
+import JwtService, {TokenType} from "./jwt.service";
 
 export const UserGalleryGetDTO = z.object({
-  userId: z.string(),
+  limit: z.number().optional(),
+  offset: z.number().optional()
 });
 
+export const DiscordUserAuthDTO = z.object({
+  code: z.string()
+});
+
+
+export const DiscordOAuthResponseDTO = z.object({
+  token_type: z.string(),
+  access_token: z.string(),
+  expires_in: z.number(),
+  refresh_token: z.string(),
+  scope: z.string()
+})
+type DiscordOAuthResponseType = z.infer<typeof DiscordOAuthResponseDTO>
+
+
 class UserService {
-  static async getGallery(body: z.infer<typeof UserGalleryGetDTO>) {
+  static async getGallery(
+      auth: TokenType,
+      body: z.infer<typeof UserGalleryGetDTO>) {
     const prisma = DBClient.getInstance().prisma
 
     const userImagePrompts = await prisma.userImageGeneratePrompt.findMany({
       where: {
-        userId: body.userId
+        userId: auth.sub
       },
       include: {
         imageGeneratePrompt: {
@@ -28,6 +51,72 @@ class UserService {
     });
 
     return successWithData({userImagePrompts})
+  }
+
+  static async getMe(auth: TokenType) {
+    const prisma = DBClient.getInstance().prisma
+
+    const dt = await prisma.user.findFirst({
+      where: {
+        uuid: auth.sub
+      },
+      include: {
+        discordUsers: true
+      }
+    })
+
+    return successWithData(dt)
+  }
+
+  static async discordOAuth(body: z.infer<typeof DiscordUserAuthDTO>) {
+    const config = configLazy()
+
+    const formData = new URLSearchParams({
+      client_id: config.discord.clientId,
+      client_secret: config.discord.clientSecret,
+      grant_type: "authorization_code",
+      code: body.code,
+      redirect_uri: "http://localhost:3000/auth"
+    })
+
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      "Accept-Encoding": 'application/x-www-form-urlencoded',
+    }
+
+    try {
+      const output = await axios.post<DiscordOAuthResponseType>("https://discord.com/api/oauth2/token",
+          formData,
+          {
+            headers
+          }
+      );
+
+      if (output.data) {
+        const accessToken = output.data.access_token
+        const userData = await DiscordService.getMe(accessToken)
+
+        const user = await UserRepo.upsertDiscordUser({
+          username: userData.username,
+          userId: userData.id,
+          avatarUrl: userData.avatar
+        })
+        await UserRepo.discordUserStoreTokens({
+          discordUserId: userData.id,
+          username: userData.username,
+          accessToken: accessToken,
+          refreshToken: output.data.refresh_token,
+          scope: output.data.scope,
+          avatar: userData.avatar
+        })
+
+        const token = JwtService.generateUserToken({userUuid: user.uuid});
+        return successWithData({token})
+      }
+      return successWithData({data: output.data})
+    } catch (e) {
+      return badRequest("unknown error occurred")
+    }
   }
 }
 

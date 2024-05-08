@@ -12,8 +12,8 @@ class AwsService {
     const s3 = (process.env.NODE_ENV == "development") ?
         new aws.S3({
           credentials: {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-            secretAccessKey: process.env.AWS_SECRET_KEY_SECRET || "",
+            accessKeyId: process.env.STORAGE_AWS_ACCESS_KEY_ID || "",
+            secretAccessKey: process.env.STAORAGE_AWS_SECRET_KEY_SECRET || "",
           },
           ...s3Config
         })
