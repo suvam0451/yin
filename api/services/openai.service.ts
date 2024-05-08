@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import {configLazy} from "./config.service"
+import {configLazy} from "../../src/services/config.service"
 import {z} from "zod";
 
 
@@ -71,6 +71,7 @@ export class OpenAiService {
         quality: dto.quality || "standard",
         n: 1,
       })
+      console.log(resp.data);
       return resp.data
     } catch (e) {
       console.log("error", e);

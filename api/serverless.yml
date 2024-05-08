@@ -1,0 +1,54 @@
+service: yin-backend-dev
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-central-1
+  timeout: 15
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-webpack
+  - serverless-offline
+package:
+  individually: false
+  include:
+    - "node_modules/.prisma/**"
+#  exclude:
+#    - "node_modules/@prisma/engines/**"
+#    - "node_modules/prisma/libquery_engine-*"
+#    - "node_modules/.cache/prisma/**"
+#    - "node_modules/.prisma/client/libquery_engine-*"
+#    - '!node_modules/.prisma/client/libquery_engine-rhel-*'
+
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: false
+    packager: 'npm'
+#    packagerOptions:
+#      scripts:
+#        - prisma generate
+#        - find . -name "libquery_engine-*" -not -name "libquery_engine-rhel-openssl-*" | xargs rm
+
+functions:
+  discordAskPrompt:
+    handler: routes/chat-prompt.main
+    events:
+      - httpApi:
+          path: /discord/chat-prompt
+          method: any
+  discordImagePrompt:
+    handler: routes/image-prompt.main
+    events:
+      - httpApi:
+          path: /discord/image-prompt
+          method: any
+  userGallery:
+    handler: routes/user.getGallery
+    events:
+      - httpApi:
+          path: /user/gallery
+          method: any
+

@@ -33,7 +33,7 @@ async function post(req: VercelRequest, res: VercelResponse) {
   return
 }
 
-async function get(req: VercelRequest, res: VercelResponse) {
+export async function get(req: VercelRequest, res: VercelResponse) {
   const prisma = new PrismaClient()
   const data = await prisma.user.findMany()
 

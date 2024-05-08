@@ -11,7 +11,7 @@ Support for other cloud providers may get added in the future.
 # Step 1: Generate the migration file against your database
 npx prisma migrate diff --from-url "{REMOTE_SERVER}" --shadow-database-url "{PROBABLY_LOCAL_POSTGRES_SERVER}" --to-migrations ./prisma/migrations --script > backward.sql
  
-# Step 2: Run the migration file against your database
+# Step [serverless.yml](serverless.yml)2: Run the migration file against your database
 npx prisma db execute --url "{REMOTE_SERVER}" --file backward.sql
 
 CREATE ROLE admin WITH LOGIN PASSWORD '<password within quotes>'

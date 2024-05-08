@@ -1,0 +1,128 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("SUPABASE_DATABASE_CONNECTION_TRANSACTION_POOLER")
+  directUrl = env("SUPABASE_DATABASE_CONNECTION_SESSION_POOLER")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+  binaryTargets = ["rhel-openssl-3.0.x", "darwin-arm64"]
+}
+
+model User {
+  uuid                  String                     @id @default(uuid())
+  username              String
+  active                Boolean                    @default(true)
+  createdAt             DateTime                   @default(now()) @map("created_at")
+  updatedAt             DateTime                   @updatedAt @map("updated_at")
+  openaiChatbotPersonas UserOpenaiChatbotPersona[]
+  discordUsers          DiscordUser[]
+  imageGeneratePrompts  UserImageGeneratePrompt[]
+
+  @@map("user")
+}
+
+model UserImageGeneratePrompt {
+  uuid                  String              @id @default(uuid())
+  user                  User                @relation(fields: [userId], references: [uuid])
+  userId                String              @map("user_id")
+  imageGeneratePrompt   ImageGeneratePrompt @relation(fields: [imageGeneratePromptId], references: [uuid])
+  imageGeneratePromptId String              @map("image_generate_prompt_id")
+  createdAt             DateTime            @default(now()) @map("created_at")
+
+  @@map("user_image_generate_prompt")
+}
+
+model ImageGeneratePrompt {
+  uuid          String                            @id @default(uuid())
+  prompt        String
+  openaiSetting ImageGeneratePromptOpenaiSetting?
+  results       ImageGeneratePromptResult[]
+  userPrompts   UserImageGeneratePrompt[]
+  createdAt             DateTime            @default(now()) @map("created_at")
+
+  @@map("image_generate_prompt")
+}
+
+model ImageGeneratePromptOpenaiSetting {
+  id       Int                 @id @default(autoincrement())
+  model    String
+  size     String
+  quality  String
+  prompt   ImageGeneratePrompt @relation(fields: [promptId], references: [uuid])
+  promptId String              @unique @map("image_generate_prompt_id")
+
+  @@map("image_generate_prompt_openai_setting")
+}
+
+model MediaAsset {
+  uuid        String @id @default(uuid())
+  relativeUrl String
+  type        String
+
+  promptResults ImageGeneratePromptResult[]
+
+  @@map("media_asset")
+}
+
+model ImageGeneratePromptResult {
+  uuid String @id @default(uuid())
+
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [uuid])
+  mediaAssetId String     @map("media_asset_id")
+
+  prompt   ImageGeneratePrompt @relation(fields: [promptId], references: [uuid])
+  promptId String              @map("image_generate_prompt_id")
+
+  @@map("image_generate_prompt_result")
+}
+
+model DiscordUser {
+  id       String @id @unique
+  username String
+  avatar   String
+
+  // FK
+  user   User   @relation(fields: [userId], references: [uuid])
+  userId String @map("user_id")
+
+  @@map("discord_user")
+}
+
+model DiscordGuild {
+  id   Int    @unique
+  name String
+
+  @@map("discord_guild")
+}
+
+model OpenaiChatbotPersona {
+  uuid      String   @id @default(uuid())
+  name      String
+  notes     String?
+  active    Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("openai_chatbot_persona")
+}
+
+model UserOpenaiChatbotPersona {
+  id     Int     @id @default(autoincrement())
+  active Boolean
+
+  // FK
+  user   User   @relation(fields: [userId], references: [uuid])
+  userId String @map("user_id")
+
+  @@map("user_openai_chatbot_persona")
+}
+
+model OpenaiChatbotPersonaInstruction {
+  uuid      String   @id @default(uuid())
+  name      String
+  active    Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("openai_chatbot_persona_instruction")
+}

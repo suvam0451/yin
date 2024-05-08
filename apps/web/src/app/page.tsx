@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import YinBanner from "@/components/banners/Yin";
 import YinFeatures from "@/components/features/Yin";
 import YinRoadmap from "@/components/roadmaps/Yin";

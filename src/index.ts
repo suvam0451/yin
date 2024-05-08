@@ -34,7 +34,7 @@ async function main() {
   bot.on("messageCreate", async (message: Message) => {
     if (message.author.bot || message.author.id === botClientId || message.channel.type === ChannelType.DM) return
 
-    // if(message.mentions.users.first().bot)
+    // if(message.mentions.routes.first().bot)
     if (message.mentions.users.first()?.id === botClientId) {
       if (!message.content.startsWith(`<@${botClientId}>`)) return
       let mentionRegex = / ?<@(.*?)> ?/g;
@@ -44,7 +44,7 @@ async function main() {
       prompt = prompt.replaceAll(emojiRegex, "").trim()
       if (prompt === "") return
 
-      const retval = await VercelBackend.post("/users/chat-prompt", {
+      const retval = await VercelBackend.post("/discord/chat-prompt", {
         guildId: message.guildId,
         userId: message.author.id,
         userDisplayName: message.author.displayName,
@@ -52,6 +52,8 @@ async function main() {
         avatarUrl: message.author.avatar,
         prompt: prompt
       });
+      console.log(retval);
+
       if (!retval?.data?.promptReply) return
       await message.reply({
         content: retval?.data?.promptReply
@@ -108,7 +110,7 @@ https://suvam0451.com
 
         try {
           await interaction.reply('Working on it...');
-          const retval = await VercelBackend.post("/users/image-prompt", {
+          const retval = await VercelBackend.post("/discord/image-prompt", {
             guildId,
             userId,
             userDisplayName,
@@ -131,6 +133,7 @@ https://suvam0451.com
             return
           }
         } catch (e) {
+          console.log(e)
           await interaction.editReply("Request failed")
           return
         }

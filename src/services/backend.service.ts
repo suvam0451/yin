@@ -8,7 +8,7 @@ class VercelBackend {
     try {
       return (await axios.post(`${baseUrl}${path}`, body)).data
     } catch (e) {
-      console.log((e as any).response.data.error.issues)
+      console.log(e)
       return null
     }
   }

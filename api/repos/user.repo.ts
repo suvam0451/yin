@@ -3,6 +3,32 @@ import DBClient from "./_client";
 import {z} from "zod";
 
 class UserRepository {
+  static async get(uuid: string) {
+    const prisma = DBClient.getInstance().prisma
+
+    return prisma.user.findFirst({
+      where: {
+        uuid: uuid
+      }
+    });
+  }
+
+  /**
+   * Relates a image prompt to user
+   * @param userId
+   * @param promptId
+   */
+  static async addImagePrompt(userId: string, promptId: string) {
+    const prisma = DBClient.getInstance().prisma
+
+    return prisma.userImageGeneratePrompt.create({
+      data: {
+        userId,
+        imageGeneratePromptId: promptId
+      }
+    });
+  }
+
   static async upsertDiscordUser({
                                    guildId,
                                    userId,
@@ -26,7 +52,7 @@ class UserRepository {
       }
     });
 
-    if (existingUser) return existingUser;
+    if (existingUser) return existingUser.user;
 
     return prisma.user.create({
       data: {
