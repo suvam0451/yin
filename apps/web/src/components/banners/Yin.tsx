@@ -1,10 +1,9 @@
 import {Box, Text} from '@chakra-ui/react'
-import {Button, ButtonGroup, Center} from '@chakra-ui/react'
+import {Button} from '@chakra-ui/react'
 import Image from 'next/image'
-import CommonBanner from "@/components/banners/Common";
+import CommonBanner from "./Common";
 import {FaDiscord, FaChevronDown} from "react-icons/fa";
 import {MutableRefObject} from "react";
-import { scroller } from 'react-scroll';
 
 type YinBannerProps = {
   featuresSectionRef: MutableRefObject<HTMLDivElement | undefined>

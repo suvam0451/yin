@@ -3,11 +3,9 @@
 import dynamic from 'next/dynamic'
 import React, {useRef, useState} from "react";
 import {Box, Button, Text} from "@chakra-ui/react";
-import YinBanner from "@/components/banners/Yin";
-import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
-import ImageGallery from "@/components/ImageGallery";
-import CommonBanner from "@/components/banners/Common";
-import ProjectLandingPageContainer from "@/container/ProjectLandingPageContainer";
+import ImageGallery from "../../components/ImageGallery";
+import CommonBanner from "../../components/banners/Common";
+import ProjectLandingPageContainer from "../../container/ProjectLandingPageContainer";
 
 function DashboardPage() {
   const featuresSectionRef = useRef<HTMLDivElement>();

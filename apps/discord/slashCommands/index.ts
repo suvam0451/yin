@@ -1,5 +1,3 @@
-import {SlashCommandNumberOption} from "discord.js";
-
 const slashCommands = [{
   name: "help",
   description: "About me and my capabilities."

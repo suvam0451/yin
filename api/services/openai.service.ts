@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import {configLazy} from "../../src/services/config.service"
+import {configLazy} from "../../apps/discord/services/config.service"
 import {z} from "zod";
 
 
