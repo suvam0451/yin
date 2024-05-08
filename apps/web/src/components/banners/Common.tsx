@@ -9,7 +9,8 @@ function CommonBanner() {
   return <>
     <div style={{
       flexDirection: "row",
-      fontSize: "1.0rem"
+      fontSize: "1.0rem",
+      // backgroundColor: "#1E1E1E"
     }}>
       <div style={{display: "inline-flex", alignItems: "center", marginRight: MARGIN}}>
         <FaWrench color={FONT_COLOR}/>

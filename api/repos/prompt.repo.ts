@@ -1,6 +1,8 @@
 import DBClient from "./_client";
 import UserRepository from "./user.repo";
 import MediaAssetRepository from "./media-asset.repo";
+import AwsService from "../services/aws.service";
+import {randomUUID} from "crypto"
 
 class PromptRepository {
   static async save(prompt: string) {
@@ -65,8 +67,13 @@ class PromptRepository {
 
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
+
+      const uuid = randomUUID()
+
+      const res = await AwsService.uploadFileFromUrl(result, `${uuid}.jpg`)
       const savedAsset =
-          await MediaAssetRepository.save({relativeUrl: result, type: "image/type"})
+          await MediaAssetRepository.save({relativeUrl: `${uuid}.jpg`, type: "image/jpeg"})
+
       await prisma.imageGeneratePromptResult.create({
         data: {
           promptId: _prompt.uuid,

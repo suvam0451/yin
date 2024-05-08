@@ -9,15 +9,14 @@ class AwsService {
       params: {Bucket: "yin-storage-dev"},
     }
 
-    const s3 = (process.env.NODE_ENV == "development") ?
-        new aws.S3({
-          credentials: {
-            accessKeyId: process.env.STORAGE_AWS_ACCESS_KEY_ID || "",
-            secretAccessKey: process.env.STAORAGE_AWS_SECRET_KEY_SECRET || "",
-          },
-          ...s3Config
-        })
-        : new aws.S3(s3Config)
+    console.log(process.env.STORAGE_AWS_ACCESS_KEY_ID, process.env.STAORAGE_AWS_SECRET_KEY_SECRET)
+    const s3 = (process.env.NODE_ENV == "development") ? new aws.S3({
+      credentials: {
+        accessKeyId: process.env.STORAGE_AWS_ACCESS_KEY_ID || "",
+        secretAccessKey: process.env.STAORAGE_AWS_SECRET_KEY_SECRET || "",
+      },
+      ...s3Config
+    }) : new aws.S3(s3Config)
 
     const uploader = new aws.S3.ManagedUpload({
       params: {
@@ -29,16 +28,21 @@ class AwsService {
         ContentType: "image/jpeg"
       }
     })
-    const promise = uploader.promise();
-    promise.then((data) => {
-      console.log("success")
-    }).catch((err) => {
-      console.log("error")
-    });
+    try {
+      const promise = await uploader.promise();
+      console.log(promise)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
+  /**
+   * Downloads a remote file and saves it in s3
+   * @param url
+   * @param filename
+   */
   static async uploadFileFromUrl(url: string, filename: string) {
-    const item = await axios.get(encodeURI(url), {responseType: "arraybuffer"});
+    const item = await axios.get(url, {responseType: "arraybuffer"});
     const data = Buffer.from(item.data, 'utf8')
     await AwsService.uploadContent(data, filename);
   }

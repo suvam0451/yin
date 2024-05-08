@@ -5,6 +5,8 @@ export function routeNotFound() {
   return {
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     statusCode: 404,
     body: JSON.stringify(
@@ -38,6 +40,8 @@ export function badRequest(msg: string, error?: object) {
   return {
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     statusCode: 400,
     body: JSON.stringify(
@@ -54,6 +58,8 @@ export function successWithData(data: any) {
   return {
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     statusCode: 200,
     body: JSON.stringify({

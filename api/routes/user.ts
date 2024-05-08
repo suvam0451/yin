@@ -6,7 +6,6 @@ import {z} from "zod";
 
 export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   const resource = event.pathParameters?.resource
-  console.log(event.requestContext.httpMethod, (event.requestContext as any)["http"]["method"])
   const httpMethod = (event.requestContext as any)["http"]["method"]
 
   switch (httpMethod) {

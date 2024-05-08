@@ -7,5 +7,7 @@
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5"
   },
-  "scripts": {}
+  "scripts": {
+    "dev": "ts-node index.ts"
+  }
 }

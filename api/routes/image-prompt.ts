@@ -27,7 +27,6 @@ export async function main(event: APIGatewayProxyEvent) {
   const {success, data, error} = UserImagePromptDTOValidator.safeParse(body);
   if (!success) return badRequest("input validation error", error);
 
-  console.log("upserting user...")
   const user = await UserRepository.upsertDiscordUser({
     guildId: body.guildId,
     userId: body.userId,
@@ -35,16 +34,12 @@ export async function main(event: APIGatewayProxyEvent) {
     username: body.username,
     avatarUrl: body.avatarUrl
   })
-  console.log("user upserted...")
-
-  console.log("generating reply...")
   const promptReply = await OpenAiService.generateImage({
     prompt: body.prompt,
     model: body.model,
     size: body.size,
     quality: body.quality
   })
-  console.log("generated reply...")
 
   let results: string[] = []
   if (promptReply !== undefined && promptReply.length > 0) {

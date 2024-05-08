@@ -6,7 +6,22 @@ provider:
   runtime: nodejs20.x
   region: eu-central-1
   timeout: 15
-
+  iam:
+    role:
+      statements:
+        # Allow functions to list all buckets
+        - Effect: Allow
+          Action: 's3:ListBucket'
+          Resource: '*'
+        - Effect: Allow
+          Action:
+            - 's3:GetObject'
+            - "s3:GetObjectAcl"
+            - "s3:PutObject"
+            - "s3:PutObjectAcl"
+            - "s3:DeleteObject"
+          Resource: '*'
+#            - 'arn:aws:s3:::yin-storage-dev/*'
 plugins:
   - serverless-dotenv-plugin
   - serverless-webpack
@@ -39,22 +54,26 @@ functions:
       - httpApi:
           path: /discord/chat-prompt
           method: any
+          cors: true # <-- CORS!
   discordImagePrompt:
     handler: routes/image-prompt.main
     events:
       - httpApi:
           path: /discord/image-prompt
           method: any
+          cors: true # <-- CORS!
   userResourceRoute:
     handler: routes/user.getGallery
     events:
       - httpApi:
           path: /user/{resource} # gallery
           method: any
-#  discordOAuth:
-#    handler: routes/user.discordOAuth
-#    events:
-#      - httpApi:
-#          path: /user/discord-oauth # discord-oauth
-#          method: POST
+          cors: true # <-- CORS!
+  getRecentImagePrompts:
+    handler: routes/global.getRecentImagePrompts
+    events:
+      - httpApi:
+          path: /recent/image-prompts # discord-oauth
+          method: any
+          cors: true # <-- CORS!
 
