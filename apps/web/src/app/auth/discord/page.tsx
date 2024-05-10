@@ -7,7 +7,7 @@ import {Suspense} from 'react';
 import axios from 'axios';
 import {configLazy} from '../../../../services/config';
 import LocalStorage from '../../../../services/local-storage';
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/navigation';
 
 function DiscordAuthPage() {
 	const searchParams = useSearchParams();
