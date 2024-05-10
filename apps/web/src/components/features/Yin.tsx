@@ -15,7 +15,7 @@ function YinFeatures(props: YinFeaturesProps) {
       <FaWineGlass color={"rgba(168,85,247, 0.6)"} size={64} style={{margin: "auto"}}/>
       <Text fontWeight={700} fontSize={"2xl"} className={"darkmode_text_normal"} textAlign={"center"} my={4}>
         Simple and Classy, Just Like Me</Text>
-      <Text className={"darkmode_text_normal"}>I only have three commands. They are self-explanatory and don't get in your way.</Text>
+      <Text className={"darkmode_text_normal"}>I only have three commands. They are self-explanatory and don&apos;t get in your way.</Text>
     </div>
     <div style={{flex: 1, padding: "2rem"}}>
       <IoMdCamera color={"rgba(168,85,247, 0.6)"} size={64} style={{margin: "auto"}}/>
@@ -36,7 +36,7 @@ function YinFeatures(props: YinFeaturesProps) {
       <Text className={"darkmode_text_normal"}>The default personality I use to reply to your questions can be changed.
       </Text>
       <Text className={"darkmode_text_normal"}>Switch chat session personas by
-        tagging me with it's name in dedicated channels.</Text>
+        tagging me with it&apos;s name in dedicated channels.</Text>
     </div>
   </div>
 }

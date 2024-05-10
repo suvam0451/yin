@@ -9,7 +9,7 @@ function YinDashboard() {
         Manage your account
       </Text>
       <Text color={"#fff"} fontWeight={700} fontSize={"5xl"} opacity={0.87}>
-        with Yin's Dashboard
+        with Yin&apos;s Dashboard
       </Text>
       <Text color={"#fff"} fontWeight={700} opacity={0.6} fontSize={"2xl"} my={4}>
         The All-In-One Configurator for Yin.
