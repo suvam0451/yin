@@ -2,7 +2,7 @@ const botClientId = process.env.NEXT_PUBLIC_DISCORD_BOT_CLIENT_ID || ""
 const botClientSecret = process.env.NEXT_PUBLIC_DISCORD_BOT_CLIENT_SECRET || ""
 const botClientToken = process.env.NEXT_PUBLIC_DISCORD_BOT_CLIENT_TOKEN || ""
 const openaiApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || ""
-const vercelBackendUrl = process.env.NEXT_PUBLIC_VERCEL_API_ENDPOINT || ""
+const backendUrl = process.env.BACKEND_ENDPOINT || ""
 
 export const config = {
   discord: {
@@ -14,7 +14,7 @@ export const config = {
     apiKey: openaiApiKey
   },
   vercel: {
-    backendUrl: vercelBackendUrl
+    backendUrl
   }
 }
 
@@ -23,7 +23,7 @@ export function configLazy() {
   const botClientSecret = process.env.NEXT_PUBLIC_DISCORD_BOT_CLIENT_SECRET || ""
   const botClientToken = process.env.NEXT_PUBLIC_DISCORD_BOT_CLIENT_TOKEN || ""
   const openaiApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY || ""
-  const vercelBackendUrl = process.env.NEXT_PUBLIC_VERCEL_API_ENDPOINT || ""
+  const backendUrl = process.env.BACKEND_ENDPOINT || ""
 
   return {
     discord: {
@@ -35,7 +35,7 @@ export function configLazy() {
       apiKey: openaiApiKey
     },
     vercel: {
-      backendUrl: vercelBackendUrl
+      backendUrl: backendUrl
     }
   }
 }
