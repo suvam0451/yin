@@ -1,5 +1,10 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
-import {badRequest, routeNotFound, validateBody} from './_utils';
+import {
+	badRequest,
+	routeNotFound,
+	successWithData,
+	validateBody
+} from './_utils';
 import UserService, {
 	DiscordUserAuthDTO,
 	OpenaiPersonaCreateDTO, OpenaiPersonaUpdateDTO,
@@ -88,6 +93,9 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 					return routeNotFound();
 				}
 			}
+		}
+		case "OPTIONS": {
+			return successWithData({})
 		}
 		default: {
 			return routeNotFound();

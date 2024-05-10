@@ -91,13 +91,14 @@ class UserService {
 			client_secret: config.discord.clientSecret,
 			grant_type: 'authorization_code',
 			code: body.code,
-			redirect_uri: 'http://localhost:3000/auth'
+			redirect_uri: 'https://yin.suvam0451.com/auth/discord'
 		});
 
 		const headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Accept-Encoding': 'application/x-www-form-urlencoded'
 		};
+
 
 		try {
 			const output = await axios.post<DiscordOAuthResponseType>('https://discord.com/api/oauth2/token',
@@ -130,7 +131,8 @@ class UserService {
 			}
 			return successWithData({data: output.data});
 		} catch (e) {
-			return badRequest('unknown error occurred');
+			console.log(e);
+			return badRequest('unknown error occurred.');
 		}
 	}
 
