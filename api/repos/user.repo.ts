@@ -1,6 +1,4 @@
-import {PrismaClient} from '@prisma/client';
 import DBClient from './_client';
-import {z} from 'zod';
 
 class UserRepository {
 	static async get(uuid: string) {

@@ -5,7 +5,9 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: eu-central-1
-  timeout: 30
+  timeout: 29
+  httpApi:
+    cors: true
   iam:
     role:
       statements:
@@ -54,26 +56,22 @@ functions:
       - httpApi:
           path: /discord/chat-prompt
           method: any
-          cors: true # <-- CORS!
   discordImagePrompt:
     handler: routes/image-prompt.main
     events:
       - httpApi:
           path: /discord/image-prompt
           method: any
-          cors: true # <-- CORS!
   userResourceRoute:
     handler: routes/user.getGallery
     events:
       - httpApi:
           path: /user/{resource} # gallery
           method: any
-          cors: true # <-- CORS!
   getRecentImagePrompts:
     handler: routes/global.getRecentImagePrompts
     events:
       - httpApi:
           path: /recent/image-prompts # discord-oauth
           method: any
-          cors: true # <-- CORS!
 
