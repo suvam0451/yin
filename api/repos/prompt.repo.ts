@@ -2,15 +2,15 @@ import DBClient from "./_client";
 import UserRepository from "./user.repo";
 import MediaAssetRepository from "./media-asset.repo";
 import AwsService from "../services/aws.service";
-import {randomUUID} from "crypto"
+import { randomUUID } from "crypto";
 
 class PromptRepository {
   static async save(prompt: string) {
-    const prisma = DBClient.getInstance().prisma
+    const prisma = DBClient.getInstance().prisma;
 
     return prisma.imageGeneratePrompt.create({
       data: {
-        prompt: prompt,
+        prompt: prompt
       }
     });
   }
@@ -21,29 +21,36 @@ class PromptRepository {
    * @param prompt text input
    * @param results list of images generated
    */
-  static async saveUserPrompt({userId, prompt, results}: { userId: string, prompt: string, results: string[] }) {
-    const prisma = DBClient.getInstance().prisma
-    const _prompt = await this.save(prompt)
+  static async saveUserPrompt({ userId, prompt, results }: {
+    userId: string,
+    prompt: string,
+    results: string[]
+  }) {
+    const prisma = DBClient.getInstance().prisma;
+    const _prompt = await this.save(prompt);
 
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
       const savedAsset =
-          await MediaAssetRepository.save({relativeUrl: result, type: "image/type"})
+        await MediaAssetRepository.save({
+          relativeUrl: result,
+          type: "image/type"
+        });
 
       await prisma.imageGeneratePromptResult.create({
         data: {
           promptId: _prompt.uuid,
           mediaAssetId: savedAsset.uuid
         }
-      })
+      });
     }
 
-    const user = await UserRepository.get(userId)
-    if (user == null) return null
-    return UserRepository.addImagePrompt(user.uuid, _prompt.uuid)
+    const user = await UserRepository.get(userId);
+    if (user == null) return null;
+    return UserRepository.addImagePrompt(user.uuid, _prompt.uuid);
   }
 
-  static async saveOpenaiPrompt({userId, prompt, results, options}: {
+  static async saveOpenaiPrompt({ userId, prompt, results, options }: {
     userId: string, prompt: string, results: string[],
     options: {
       size: string,
@@ -51,8 +58,8 @@ class PromptRepository {
       quality: string
     }
   }) {
-    const prisma = DBClient.getInstance().prisma
-    const _prompt = await this.save(prompt)
+    const prisma = DBClient.getInstance().prisma;
+    const _prompt = await this.save(prompt);
 
     // Attach the OpenAI options submitted
     await prisma.imageGeneratePromptOpenaiSetting.create({
@@ -63,28 +70,31 @@ class PromptRepository {
         size: options.size || "",
         quality: options.quality || ""
       }
-    })
+    });
 
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
 
-      const uuid = randomUUID()
+      const uuid = randomUUID();
 
-      const res = await AwsService.uploadFileFromUrl(result, `${uuid}.jpg`)
+      const res = await AwsService.uploadFileFromUrl(result, `${uuid}.jpg`);
       const savedAsset =
-          await MediaAssetRepository.save({relativeUrl: `${uuid}.jpg`, type: "image/jpeg"})
+        await MediaAssetRepository.save({
+          relativeUrl: `${uuid}.jpg`,
+          type: "image/jpeg"
+        });
 
       await prisma.imageGeneratePromptResult.create({
         data: {
           promptId: _prompt.uuid,
           mediaAssetId: savedAsset.uuid
         }
-      })
+      });
     }
 
-    const user = await UserRepository.get(userId)
-    if (user == null) return null
-    return UserRepository.addImagePrompt(user.uuid, _prompt.uuid)
+    const user = await UserRepository.get(userId);
+    if (user == null) return null;
+    return UserRepository.addImagePrompt(user.uuid, _prompt.uuid);
   }
 }
 

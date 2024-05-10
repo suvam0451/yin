@@ -102,31 +102,35 @@ model DiscordGuild {
 }
 
 model OpenaiChatbotPersona {
-  uuid      String   @id @default(uuid())
-  name      String
-  notes     String?
-  active    Boolean
-  createdAt DateTime @default(now()) @map("created_at")
+  uuid                     String                            @id @default(uuid())
+  name                     String
+  notes                    String?
+  active                   Boolean                           @default(true)
+  createdAt                DateTime                          @default(now()) @map("created_at")
+  instructions             OpenaiChatbotPersonaInstruction[]
+  UserOpenaiChatbotPersona UserOpenaiChatbotPersona[]
 
   @@map("openai_chatbot_persona")
 }
 
 model UserOpenaiChatbotPersona {
-  id     Int     @id @default(autoincrement())
-  active Boolean
-
-  // FK
-  user   User   @relation(fields: [userId], references: [uuid])
-  userId String @map("user_id")
+  id                     Int                  @id @default(autoincrement())
+  active                 Boolean              @default(true)
+  user                   User                 @relation(fields: [userId], references: [uuid])
+  userId                 String               @map("user_id")
+  openaiChatbotPersona   OpenaiChatbotPersona @relation(fields: [openaiChatbotPersonaId], references: [uuid])
+  openaiChatbotPersonaId String               @map("openai_chatbot_persona_id")
 
   @@map("user_openai_chatbot_persona")
 }
 
 model OpenaiChatbotPersonaInstruction {
-  uuid      String   @id @default(uuid())
-  name      String
-  active    Boolean
-  createdAt DateTime @default(now()) @map("created_at")
+  uuid                   String               @id @default(uuid())
+  text                   String
+  active                 Boolean              @default(true)
+  createdAt              DateTime             @default(now()) @map("created_at")
+  openaiChatbotPersona   OpenaiChatbotPersona @relation(fields: [openaiChatbotPersonaId], references: [uuid])
+  openaiChatbotPersonaId String               @map("openai_chatbot_persona_id")
 
   @@map("openai_chatbot_persona_instruction")
 }

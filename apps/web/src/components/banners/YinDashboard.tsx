@@ -19,7 +19,7 @@ function YinDashboard() {
         You can set the default visibility of your profile and prompts.
         You can add and edit chatbot personas for Yin.
       </Text>
-      <a href={"https://discord.com/oauth2/authorize?client_id=1236723979532636301&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord&scope=identify"}>
+      <a href={"https://discord.com/oauth2/authorize?client_id=1236723979532636301&response_type=code&redirect_uri=https%3A%2F%2Fyin.suvam0451.com%2Fauth%2Fdiscord&scope=identify"}>
         <Button my={8} size={"lg"} colorScheme={"purple"}
                 onClick={() => {
                 }}><FaDiscord color={"white"} opacity={0.6}/>
