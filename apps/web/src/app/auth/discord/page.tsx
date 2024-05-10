@@ -20,8 +20,12 @@ function DiscordAuthPage() {
 			axios.post(`${config.vercel.backendUrl}/user/discord-oauth`, {
 				code
 			}).then((res) => {
-				LocalStorage.set('BACKEND_API_TOKEN', res.data?.token);
-				router.push('/dashboard');
+				if (res.data?.data?.token) {
+					LocalStorage.set('BACKEND_API_TOKEN', res.data?.data?.token);
+					router.push('/dashboard');
+				} else {
+					console.log('error saving token');
+				}
 			}).catch((e) => {
 				console.log('error using token', e);
 			});

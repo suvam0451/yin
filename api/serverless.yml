@@ -74,4 +74,3 @@ functions:
       - httpApi:
           path: /recent/image-prompts # discord-oauth
           method: any
-
