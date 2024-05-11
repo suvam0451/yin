@@ -167,7 +167,9 @@ function PersonaCreate() {
 				</Box>
 				<Box display={'flex'} style={{alignItems: 'center', flexGrow: 1}}>
 					<Text c={'white'} opacity={0.6}
-								fw={400}>{personaFomContext.promptPreview}</Text>
+								style={{wordBreak: 'break-word'}}
+								fw={400}>{personaFomContext.promptPreview}
+					</Text>
 				</Box>
 			</Box>
 

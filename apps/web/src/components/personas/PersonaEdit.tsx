@@ -97,7 +97,6 @@ function PersonaEdit() {
 	}, [status, data]);
 
 	useEffect(() => {
-		console.log('value edited', searchValue);
 		if (!searchValue) return;
 		personaFormContext.updateUuid(searchValue);
 	}, [searchValue]);
@@ -106,7 +105,6 @@ function PersonaEdit() {
 	 * Submit changes and refetch the persona list on success
 	 * */
 	function onUpdateClick() {
-		console.log('update clicked', personaFormContext);
 		const uuid = personaFormContext.uuid;
 		const name = personaFormContext.name;
 		const desc = personaFormContext.description;
@@ -226,6 +224,7 @@ function PersonaEdit() {
 				<Text c={'#fff'} opacity={0.6} fw={500}>Prompt
 					Preview</Text>
 			} BodyComponent={<Text
+				style={{wordBreak: "break-word"}}
 				c={'white'} opacity={0.6}
 				fw={400}>{personaFormContext.promptPreview}</Text>} />
 

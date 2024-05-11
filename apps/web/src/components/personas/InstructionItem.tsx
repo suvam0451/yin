@@ -45,20 +45,24 @@ function InstructionItem({
 		style={{
 			flexDirection: 'row',
 			alignItems: 'center'
+			// maxWidth: "24rem"
 		}}
 		key={itemIndex}
 	>
 		<Box style={{
 			flexDirection: 'row',
-			alignItems: 'center', minWidth: '10rem'
+			alignItems: 'center',
+			minWidth: '10rem'
 		}} />
 		<Box display={'flex'} style={{alignItems: 'center', flexGrow: 1}}>
-			<Input placeholder={`Instruction #${itemIndex + 1}`} w={'100%'}
-						 onChange={onInputChanged} value={Value} />
+			<Input
+				placeholder={`Instruction #${itemIndex + 1}`}
+				w={'100%'}
+				onChange={onInputChanged} value={Value} />
 			<TrashIcon size={24} style={{marginLeft: '0.5rem'}}
 								 onClick={onInstructionRemove} />
 		</Box>
 	</Box>;
 }
 
-export default InstructionItem
+export default InstructionItem;
