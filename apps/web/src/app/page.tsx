@@ -17,7 +17,6 @@ export default function Home() {
 				<YinBanner featuresSectionRef={featuresSectionRef} />
 				<YinFeatures featuresSectionRef={featuresSectionRef as any} />
 				<YinRoadmap />
-				<YinFooter />
 			</ProjectLandingPageContainer>
 		</main>
 	);
