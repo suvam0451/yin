@@ -8,7 +8,7 @@ function YinDashboard() {
 	const auth = useYinAuthContext();
 	const searchParams = useSearchParams();
 
-	if (searchParams.get('module') !== 'home') return <Box></Box>;
+	if (searchParams.get('module') !== null) return <Box></Box>;
 
 	return <Box mt={8} px={6} display={'flex'}>
 		<Box pr={4}>

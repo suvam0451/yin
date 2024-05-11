@@ -53,38 +53,34 @@ const PersonaEditorFormItemContainer = styled(Box)`
     align-items: center;
 `;
 
-const PersonaEditorFormFieldBox = styled(Box)`
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    min-width: 10rem;
-`;
-
-const PersonaEditorFormValueBox = styled(Box)`
-    flex: 5;
-    display: flex;
-    align-items: center;
-`;
-
 function PersonaEdit() {
-	const personaFomContext = usePersonaFormContext();
+	const personaFormContext = usePersonaFormContext();
 	const auth = useYinAuthContext();
 	const [Data, setData]
 		= useState<z.infer<typeof OpenaiChatbotPersona>[]>([]);
+	const [searchValue, setSearchValue]
+		= useState<string | null>(null);
+
 
 	async function api() {
 		if (!auth.token) return {data: []};
 
-		return BackendService.getAuthenticated<z.infer<typeof OpenaiChatbotPersonaBackendType>>(
+		return BackendService.getAuthenticated<z.infer<
+			typeof OpenaiChatbotPersonaBackendType>>(
 			auth.token,
 			`user/openai-persona`);
 	}
 
 	function personaSelected(e: any) {
-		console.log(e);
-	}
+		const match = Data.find((o) => o.uuid === e);
+		if (!match) return;
 
+		personaFormContext.updateUuid(match.uuid);
+		personaFormContext.updateName(match.name);
+		personaFormContext.updateDescription(match.notes);
+		personaFormContext.updateInstructions(
+			match.instructions.map((o) => o.text));
+	}
 
 	// Queries
 	const {status, data, refetch} = useQuery({
@@ -93,13 +89,44 @@ function PersonaEdit() {
 	});
 
 	useEffect(() => {
-
 		// @ts-ignore
 		if (data?.data?.data!) {
 			// @ts-ignore
 			setData(data?.data?.data?.map((o) => o.openaiChatbotPersona));
 		}
 	}, [status, data]);
+
+	useEffect(() => {
+		console.log('value edited', searchValue);
+		if (!searchValue) return;
+		personaFormContext.updateUuid(searchValue);
+	}, [searchValue]);
+
+	/**
+	 * Submit changes and refetch the persona list on success
+	 * */
+	function onUpdateClick() {
+		console.log('update clicked', personaFormContext);
+		const uuid = personaFormContext.uuid;
+		const name = personaFormContext.name;
+		const desc = personaFormContext.description;
+		if (!auth.token ||
+			!uuid ||
+			!name || name === '' || !desc || desc === '') return;
+
+		BackendService.patchAuthenticated(auth.token, '/user/openai-persona', {
+			uuid,
+			name: name,
+			notes: desc,
+			instructions: personaFormContext.instructions
+		}).then((res) => {
+			console.log('update successful', res);
+			refetch().then((res) => {
+				console.log('refetch successful', res);
+			});
+		});
+	}
+
 
 	return <Box
 		display={'flex'}
@@ -117,17 +144,27 @@ function PersonaEdit() {
 						classNames={{
 							option: styles.option
 						}}
+						allowDeselect={false}
 						placeholder="Select"
 						data={Data.map((o) =>
 							({value: o.uuid, label: o.name}))}
 						style={{maxWidth: '16rem'}}
-						onSelect={personaSelected}
+						onChange={(_value, option) => {
+							setSearchValue(_value);
+							personaSelected(_value);
+						}}
+
+						value={searchValue}
 					/>
-					<IoMdRefresh size={32} color={'#fff'} opacity={0.6} onClick={(e) => {
-						refetch().then((res) => {
-							console.log(res);
-						});
-					}} />
+					<IoMdRefresh
+						size={32} color={'#fff'} opacity={0.6}
+						style={{marginLeft: '0.5rem'}}
+						onClick={(e) => {
+							refetch().then((res) => {
+								console.log(res);
+							});
+
+						}} />
 				</React.Fragment>}
 			/>
 
@@ -139,11 +176,12 @@ function PersonaEdit() {
 					<FaRegQuestionCircle color={'#fff'} opacity={0.6}
 															 style={{marginLeft: '0.25rem'}} />
 				</React.Fragment>}
-				BodyComponent={<Input placeholder="Name your chatbot persona."
-															w={'100%'}
-															onChange={(e) => {
-																personaFomContext.updateName(e.target.value);
-															}} value={personaFomContext.name} />}
+				BodyComponent={<Input
+					placeholder="Name your chatbot persona."
+					w={'100%'}
+					onChange={(e) => {
+						personaFormContext.updateName(e.target.value);
+					}} value={personaFormContext.name} />}
 			/>
 
 			<PersonaFormField TitleComponent={<>
@@ -153,8 +191,8 @@ function PersonaEdit() {
 			</>} BodyComponent={<Input
 				placeholder='Add a description. (e.g. - "Upbeat Personality. Positive Attitude")'
 				w={'100%'} onChange={(e) => {
-				personaFomContext.updateDescription(e.target.value);
-			}} value={personaFomContext.description} />} />
+				personaFormContext.updateDescription(e.target.value);
+			}} value={personaFormContext.description} />} />
 
 			<PersonaFormField TitleComponent={<>
 				<Text c={'#fff'} opacity={0.6}>Instructions</Text>
@@ -165,10 +203,10 @@ function PersonaEdit() {
 					userSelect: 'none'
 				}}>Click to Add</Text>
 				<FaPlusCircle color={'purple'} size={24}
-											onClick={personaFomContext.addInstruction} />
+											onClick={personaFormContext.addInstruction} />
 			</>} />
 
-			{personaFomContext.instructions.map((o, i) =>
+			{personaFormContext.instructions.map((o, i) =>
 				<InstructionItem
 					itemIndex={i}
 					key={i}
@@ -189,7 +227,7 @@ function PersonaEdit() {
 					Preview</Text>
 			} BodyComponent={<Text
 				c={'white'} opacity={0.6}
-				fw={400}>{personaFomContext.promptPreview}</Text>} />
+				fw={400}>{personaFormContext.promptPreview}</Text>} />
 
 			<PersonaEditorFormItemContainer>
 				<Box
@@ -200,13 +238,15 @@ function PersonaEdit() {
 				<Box display={'flex'} style={{flexDirection: 'row'}}>
 					<Button
 						colorScheme={'purple'}
-						color={'#ffffff87'}>Update</Button>
+						color={'#ffffff87'}
+						onClick={onUpdateClick}
+					>Update</Button>
 					<Button
 						colorScheme={'purple'}
 						variant={'outline'}
 						ml={'0.5rem'} size={'md'}
 						onClick={() => {
-							personaFomContext.onFormReset();
+							personaFormContext.onFormReset();
 						}}
 					>Revert Changes</Button>
 				</Box>

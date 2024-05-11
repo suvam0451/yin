@@ -18,7 +18,7 @@ function DashboardHeaderBar() {
 			label: auth.token == null ? 'Login' : 'Home',
 			visible: auth.token != null,
 			locked: false,
-			redirectUri: '/dashboard?module=home'
+			redirectUri: '/dashboard'
 		},
 		{
 			label: 'Gallery',

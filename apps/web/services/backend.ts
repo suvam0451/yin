@@ -8,6 +8,16 @@ class BackendService {
 		return await axios.post(`${baseUrl}/${route}`, body);
 	}
 
+	static async patchAuthenticated(token: string, route: string, body: any) {
+		const config = configLazy();
+		const baseUrl = config.vercel.backendUrl;
+		return await axios.patch(`${baseUrl}/${route}`, body, {
+			headers: {
+				authorization: `Bearer ${token}`
+			}
+		});
+	}
+
 	static async postAuthenticated(token: string, route: string, body: any) {
 		const config = configLazy();
 		const baseUrl = config.vercel.backendUrl;

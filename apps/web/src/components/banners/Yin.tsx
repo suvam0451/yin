@@ -19,7 +19,6 @@ function YinBanner(props: YinBannerProps) {
     minHeight: "100vh",
   }}>
     <div style={{display: "flex", flex: 1, flexGrow: 1, flexDirection: "column", alignItems: "center",}}>
-      <CommonBanner/>
       <div
           style={{
             lineHeight: 0,		/* remove line-height */

@@ -55,7 +55,7 @@ function ImageGallery() {
 		}
 	}, [query.data]);
 
-	if (searchParams.get('module') !== 'home') return <Box></Box>;
+	if (searchParams.get('module') !== null) return <Box></Box>;
 
 	return <Box bgColor={'#222'} my={8} py={4} px={8}>
 		<Text pl={4} className={'darkmode_text_normal'} fontWeight={700}

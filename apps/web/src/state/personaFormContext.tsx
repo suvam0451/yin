@@ -1,6 +1,7 @@
 import {createContext, useContext, useEffect, useState} from 'react';
 
 type PersonaFormContextType = {
+	uuid?: string | null
 	name: string
 	description: string
 	promptPreview: string
@@ -13,15 +14,19 @@ type PersonaFormContextType = {
 	addInstruction: () => void
 	removeInstruction: (index: number) => void
 
+	updateUuid: (input: string) => void
 	updateName: (input: string) => void,
 	updateDescription: (input: string) => void,
 	onUpdateInstructions: () => void,
 
+
 	updateInstructions: (items: string[]) => void
 	onFormReset: () => void
+
 }
 
 const defaultPersonaFormContext = {
+	uuid: undefined,
 	name: '',
 	description: '',
 	promptPreview: 'You will be asked something by the user, and your task is answer them.',
@@ -44,6 +49,8 @@ const defaultPersonaFormContext = {
 	updateInstructions: () => {
 	},
 	onFormReset: () => {
+	},
+	updateUuid: () => {
 	}
 };
 
@@ -57,6 +64,7 @@ export function usePersonaFormContext() {
 
 
 function WithPersonaFormContext({children}: any) {
+	const [Uuid, setUuid] = useState<string | null>(null);
 	const [Name, setName] = useState('');
 	const [Description, setDescription] = useState('');
 	const [Instructions, SetInstructions] = useState<string[]>([]);
@@ -109,7 +117,12 @@ function WithPersonaFormContext({children}: any) {
 		SetInstructions(Instructions.concat(''));
 	}
 
+	function updateUuid(input: string) {
+		setUuid(input);
+	}
+
 	function onFormReset() {
+		setUuid(null);
 		SetInstructions([]);
 		setName('');
 		setDescription('');
@@ -117,6 +130,7 @@ function WithPersonaFormContext({children}: any) {
 	}
 
 	return <PersonaFormContext.Provider value={{
+		uuid: Uuid,
 		name: Name,
 		description: Description,
 		instructions: Instructions,
@@ -127,7 +141,8 @@ function WithPersonaFormContext({children}: any) {
 		updateInstructions,
 		onFormReset,
 		updateName: onUpdateName,
-		updateDescription: onUpdateDescription
+		updateDescription: onUpdateDescription,
+		updateUuid
 	}}>
 		{children}
 	</PersonaFormContext.Provider>;
