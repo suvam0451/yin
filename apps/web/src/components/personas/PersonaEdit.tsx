@@ -63,8 +63,7 @@ function PersonaEdit() {
 
 
 	async function api() {
-		if (!auth.token) return {data: []};
-
+		if (!auth.token) return [];
 		return BackendService.getAuthenticated<z.infer<
 			typeof OpenaiChatbotPersonaBackendType>>(
 			auth.token,
@@ -85,7 +84,8 @@ function PersonaEdit() {
 	// Queries
 	const {status, data, refetch} = useQuery({
 		queryKey: ['user/openai-persona'],
-		queryFn: api
+		queryFn: api,
+		enabled: auth.token !== null && auth.token !== ''
 	});
 
 	useEffect(() => {
@@ -224,7 +224,7 @@ function PersonaEdit() {
 				<Text c={'#fff'} opacity={0.6} fw={500}>Prompt
 					Preview</Text>
 			} BodyComponent={<Text
-				style={{wordBreak: "break-word"}}
+				style={{wordBreak: 'break-word'}}
 				c={'white'} opacity={0.6}
 				fw={400}>{personaFormContext.promptPreview}</Text>} />
 

@@ -16,12 +16,17 @@ class UserRepository {
 
 		return prisma.userOpenaiChatbotPersona.findMany({
 			where: {
-				userId: uuid
+				userId: uuid,
+				active: true
 			},
 			select: {
 				openaiChatbotPersona: {
 					select: {
-						instructions: true,
+						instructions: {
+							where: {
+								active: true
+							}
+						},
 						name: true,
 						notes: true,
 						uuid: true
