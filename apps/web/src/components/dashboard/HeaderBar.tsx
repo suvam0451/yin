@@ -1,84 +1,78 @@
-import {Box, Button, Text} from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import {FaDiscord, FaLock} from "react-icons/fa";
-import {useYinAuthContext} from "../../state/auth";
+import {Box, Button, Text} from '@chakra-ui/react';
+import React, {useEffect, useState} from 'react';
+import {FaLock} from 'react-icons/fa';
+import {useYinAuthContext} from '../../state/authContext';
+import {Tabs} from '@mantine/core';
+import ProfileItem from './ProfileItem';
+import {useRouter} from 'next/navigation';
+
 
 function DashboardHeaderBar() {
-  const [SelectedTab, setSelectedTab] = useState(0)
-  const auth = useYinAuthContext()
+	const [SelectedTab, setSelectedTab] = useState(0);
+	const auth = useYinAuthContext();
+	const hasNoToken = auth.token == null || auth.token == '';
+	const router = useRouter();
 
-  useEffect(() => {
-    console.log(auth.token)
-  }, [auth]);
+	const tabs = [
+		{
+			label: auth.token == null ? 'Login' : 'Home',
+			visible: auth.token != null,
+			locked: false,
+			redirectUri: '/dashboard?module=home'
+		},
+		{
+			label: 'Gallery',
+			visible: true,
+			locked: hasNoToken,
+			redirectUri: '/dashboard?module=gallery'
+		},
+		{
+			label: 'Personas',
+			visible: true,
+			locked: hasNoToken,
+			redirectUri: '/dashboard?module=persona'
+		},
+		{
+			label: 'Settings',
+			visible: true,
+			locked: hasNoToken,
+			redirectUri: '/dashboard?module=settings'
+		}
+	];
 
-  const hasNoToken = auth.token == null || auth.token == ""
+	return <Box display={'flex'} flexDirection={'row'} mt={8} bgColor={'#232323'}>
+		<Box display={'flex'} flexDirection={'row'} flexGrow={1}>
+			{tabs.map((o, i) => <Box key={i}
+															 position={'relative'}
+															 px={2}
+															 dropShadow={'10px white'}
+															 onClick={() => {
+																 if (auth.token === null || auth.token === '') return;
+																 setSelectedTab(i);
+																 router.push(o.redirectUri);
+															 }}>
+				{SelectedTab === i &&
+					<Box
+						position={'absolute'}
+						style={{height: '2px', width: '100%'}}
 
-  const tabs = [
-    {
-      label: "Login",
-      visible: auth.token != null,
-      locked: false
-    },
-    {
-      label: "Gallery",
-      visible: true,
-      locked: hasNoToken
-    },
-    {
-      label: "Personas",
-      visible: true,
-      locked: hasNoToken
-    },
-    {
-      label: "Persona Editor",
-      visible: true,
-      locked: hasNoToken
-    },
-    {
-      label: "Settings",
-      visible: true,
-      locked: hasNoToken
-    }
-  ]
+						backgroundColor={'purple'}>
+					</Box>}
+				<Box p={2} display={'flex'} alignItems={'center'}>
+					<Text style={{
+						color: SelectedTab === i ? '#fff' : '#ffffff60'
+					}}>{o.label}
 
-  return <Box display={"flex"} flexDirection={"row"} mt={8} bgColor={"#232323"}>
-    <Box display={"flex"} flexDirection={"row"} flexGrow={1}>
-      {tabs.map((o, i) => <Box key={i}
-                               position={"relative"}
-                               px={2}
-                               //
-                               // bgColor={SelectedTab === i ? "#222" : "black"}
-                               // borderTop={SelectedTab === i ? "0px" : "1px solid purple"}
-                               // borderRight={SelectedTab === i ? "1px solid purple" : "0px"}
-          dropShadow={"10px white"}
-                               onClick={() => {
-                                 setSelectedTab(i)
-                               }}>
-        {SelectedTab === i &&
-            <Box
-                position={"absolute"}
-                style={{height: "2px", width: "100%"}}
+					</Text>
+					{o.locked &&
+						<FaLock style={{marginLeft: '4px'}} display={'inline'} size={16}
+										color={'#ffffff60'} />}
+				</Box>
+			</Box>)}
+		</Box>
 
-                backgroundColor={"purple"}>
-            </Box>}
-        <Box p={2} display={"flex"} alignItems={"center"}>
-          <Text style={{
-            color: SelectedTab === i ? "#fff" : "#ffffff60",
-            // fontSize: "1.1rem"
-          }}>{o.label}
-
-          </Text>
-          {o.locked && <FaLock style={{marginLeft: "4px"}} display={"inline"} size={16} color={"#ffffff60"}/>}
-        </Box>
-      </Box>)}
-    </Box>
-    <Box style={{display: "flex"}}>
-      <Button colorScheme={"purple"} size={"md"} variant={"outline"} fontWeight={800} ml={"0.5rem"}>Log In</Button>
-      <Button colorScheme={"purple"} size={"md"} ml={"0.5rem"}>
-        <Text ml={"4px"} color={"white"} opacity={0.6}>Sign Up</Text>
-      </Button>
-    </Box>
-  </Box>
+		<ProfileItem />
+	</Box>;
 }
 
 export default DashboardHeaderBar;

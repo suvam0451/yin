@@ -21,7 +21,7 @@ function DiscordAuthPage() {
 				code
 			}).then((res) => {
 				if (res.data?.data?.token) {
-					LocalStorage.set('BACKEND_API_TOKEN', res.data?.data?.token);
+					LocalStorage.set('BACKEND_API_TOKEN', res.data?.data?.token, true);
 					router.push('/dashboard');
 				} else {
 					console.log('error saving token');

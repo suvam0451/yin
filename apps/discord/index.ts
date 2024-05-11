@@ -92,7 +92,7 @@ That's all <3
 Use this link to create/edit your chat personas.
 You can also set my default persona and view/download your images there ^^
 
-https://suvam0451.com
+https://yin.suvam.io/dashboard
                 `)
             .setFooter({text: 'v0.1.0 • built with <3 by @suvam0451', iconURL: 'https://i.imgur.com/AfFp7pu.png'});
 
