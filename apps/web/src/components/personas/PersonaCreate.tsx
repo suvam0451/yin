@@ -115,7 +115,8 @@ function PersonaCreate() {
 			</Box>
 			{personaFomContext.instructions.map((o, i) =>
 				<InstructionItem
-					index={i}
+					itemIndex={i}
+					key={i}
 				/>)}
 
 			<Box

@@ -170,7 +170,8 @@ function PersonaEdit() {
 
 			{personaFomContext.instructions.map((o, i) =>
 				<InstructionItem
-					index={i}
+					itemIndex={i}
+					key={i}
 				/>)}
 
 			<PersonaFormField TitleComponent={<>
