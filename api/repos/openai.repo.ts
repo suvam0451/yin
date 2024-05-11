@@ -75,7 +75,8 @@ class OpenaiRepository {
 			} else {
 				await prisma.openaiChatbotPersonaInstruction.update({
 					data: {
-						text: instruction
+						text: instruction,
+						active: true
 					},
 					where: {
 						uuid: match.instructions[i].uuid
@@ -84,7 +85,34 @@ class OpenaiRepository {
 			}
 		}
 
-		return match;
+		// deactivate trailing instructions
+		if (instructions.length < match.instructions.length) {
+			for (let i = instructions.length; i < match.instructions.length; i++) {
+				await prisma.openaiChatbotPersonaInstruction.update({
+					data: {
+						active: false
+					},
+					where: {
+						uuid: match.instructions[i].uuid
+					}
+				});
+			}
+		}
+
+		// return new result
+		return prisma.openaiChatbotPersona.findFirst({
+			where: {
+				uuid,
+				active: true
+			},
+			include: {
+				instructions: {
+					where: {
+						active: true
+					}
+				}
+			}
+		});
 	}
 }
 

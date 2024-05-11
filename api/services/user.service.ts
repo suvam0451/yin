@@ -8,6 +8,7 @@ import UserRepo from '../repos/user.repo';
 import JwtService, {TokenType} from './jwt.service';
 import OpenaiRepository from '../repos/openai.repo';
 import UserRepository from '../repos/user.repo';
+import userRepo from '../repos/user.repo';
 
 export const UserGalleryGetDTO = z.object({
 	limit: z.number().optional(),
@@ -91,14 +92,13 @@ class UserService {
 			client_secret: config.discord.clientSecret,
 			grant_type: 'authorization_code',
 			code: body.code,
-			redirect_uri: 'https://yin.suvam0451.com/auth/discord'
+			redirect_uri: 'https://yin.suvam.io/auth/discord'
 		});
 
 		const headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Accept-Encoding': 'application/x-www-form-urlencoded'
 		};
-
 
 		try {
 			const output = await axios.post<DiscordOAuthResponseType>('https://discord.com/api/oauth2/token',
@@ -153,6 +153,14 @@ class UserService {
 		const x = await OpenaiRepository.updateOpenaiPersona(
 			body.uuid, body);
 		return successWithData({data: x});
+	}
+
+	static async getOpenaiChatbotPersona(auth: TokenType) {
+		const u = await UserRepository.get(auth.sub);
+		if (!u) return badRequest('user not found');
+
+		const data = await userRepo.getOpenaiChatbotPersonas(u.uuid);
+		return successWithData(data);
 	}
 }
 

@@ -11,6 +11,31 @@ class UserRepository {
 		});
 	}
 
+	static async getOpenaiChatbotPersonas(uuid: string) {
+		const prisma = DBClient.getInstance().prisma;
+
+		return prisma.userOpenaiChatbotPersona.findMany({
+			where: {
+				userId: uuid,
+				active: true
+			},
+			select: {
+				openaiChatbotPersona: {
+					select: {
+						instructions: {
+							where: {
+								active: true
+							}
+						},
+						name: true,
+						notes: true,
+						uuid: true
+					}
+				}
+			}
+		});
+	}
+
 	/**
 	 * Relates a image prompt to user
 	 * @param userId

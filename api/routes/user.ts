@@ -40,6 +40,12 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 
 					return UserService.getMe(auth);
 				}
+				case 'openai-persona': {
+					const auth = JwtService.verifyToken(event.headers['authorization']);
+					if (!auth) return badRequest('auth token invalid');
+
+					return UserService.getOpenaiChatbotPersona(auth)
+				}
 				default: {
 					return routeNotFound();
 				}
