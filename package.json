@@ -3,6 +3,7 @@
     "dev:be": "vercel dev",
     "dev:web": "npm run dev -w @yin/web",
     "dev:bot": "npm run dev -w @yin/discord",
+    "start": "npm run dev:bot",
     "script:sync": "ts-node ./apps/discord/scripts/load-slash-commands.ts"
   },
   "workspaces": [
