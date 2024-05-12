@@ -20,21 +20,21 @@ export const metadata: Metadata = {
 		'Create and interact with multiple chatbot personas ◆ Generate AI images' +
 		' using Dall-E and Stable Diffusion ◆ Customise your assistant with unique personality.',
 	openGraph: {
-		url: 'https://avatars.githubusercontent.com/u/44526763?v=4',
+		url: 'https://yin.suvam.io',
 		title: 'Yin | Chatbot and Prompt Assistant',
 		description: 'Create and interact with multiple chatbot personas ◆ Generate AI images using Dall-E and Stable Diffusion ◆ Customise your assistant with unique personality.',
 		images: [
 			{
-				url: 'https://avatars.githubusercontent.com/u/44526763?v=4',
-				width: 800,
-				height: 600,
+				url: 'https://yin-storage-dev.s3.eu-central-1.amazonaws.com/site-banner.png',
+				width: 1098,
+				height: 1486,
 				alt: 'Og Image Alt',
 				type: 'image/jpeg'
 			},
 			{
-				url: 'https://avatars.githubusercontent.com/u/44526763?v=4',
-				width: 900,
-				height: 800,
+				url: 'https://yin-storage-dev.s3.eu-central-1.amazonaws.com/site-banner.png',
+				width: 1098,
+				height: 1486,
 				alt: 'Og Image Alt Second',
 				type: 'image/jpeg'
 			}
