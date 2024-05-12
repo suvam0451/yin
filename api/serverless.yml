@@ -1,4 +1,5 @@
-service: yin-backend-dev
+service: yin-backend-prod
+#service: yin-backend-dev
 frameworkVersion: '3'
 
 provider:

@@ -7,6 +7,7 @@ export function configLazy() {
 	const jwtSecret = process.env.JWT_SECRET || '';
 	const defaultContext = process.env.DEFAULT_OPENAI_CONTEXT || '';
 	const prodiaApiKey = process.env.PRODIA_API_KEY || '';
+	const storageBucketName = process.env.AWS_STORAGE_BUCKET_NAME || '';
 
 	return {
 		openai: {
@@ -21,6 +22,9 @@ export function configLazy() {
 		},
 		prodia: {
 			apiKey: prodiaApiKey
+		},
+		aws: {
+			storageBucketName
 		}
 	};
 }
