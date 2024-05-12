@@ -43,7 +43,6 @@ Plz contact dev to enable me for your server ^^`)
 			await body.reply({embeds: [exampleEmbed], ephemeral: false});
 		} else if (commandName === 'image') {
 			await body.reply('Working on it...');
-
 			const {
 				success,
 				reason
@@ -63,7 +62,6 @@ Plz contact dev to enable me for your server ^^`)
 			const quality = body.options.get('quality')?.value || 'standard';
 
 			try {
-
 				const retval = await VercelBackend.post('/discord/image-prompt', {
 					guildId,
 					userId,
@@ -93,7 +91,6 @@ Plz contact dev to enable me for your server ^^`)
 					return;
 				}
 			} catch (e) {
-				console.log(e);
 				await body.editReply('Request failed');
 				return;
 			}

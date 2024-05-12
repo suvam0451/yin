@@ -24,10 +24,10 @@ class GuildService {
 				};
 			}
 		} catch (e: any) {
-			console.log(e.response?.data?.data);
 			return {
 				success: false,
-				reason: e?.response?.data?.message || 'unknown error occurred'
+				reason: 'I cannot serve this guild. Plz contact my developer for' +
+					' access.' || 'unknown error occurred'
 			};
 		}
 	}

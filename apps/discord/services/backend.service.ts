@@ -8,7 +8,6 @@ class VercelBackend {
 		try {
 			return (await axios.get(`${baseUrl}${path}`)).data;
 		} catch (e) {
-			// console.log(e);
 			return null;
 		}
 	}
