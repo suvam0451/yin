@@ -25,14 +25,14 @@ export const metadata: Metadata = {
 		description: 'Create and interact with multiple chatbot personas ◆ Generate AI images using Dall-E and Stable Diffusion ◆ Customise your assistant with unique personality.',
 		images: [
 			{
-				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINTh}/site-banner.png`,
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINT}/site-banner.png`,
 				width: 1578,
 				height: 806,
 				alt: 'Project Yin',
 				type: 'image/png'
 			},
 			{
-				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINTh}/site-banner.png`,
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINT}/site-banner.png`,
 				width: 1578,
 				height: 806,
 				alt: 'Project Yin',

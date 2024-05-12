@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 				type: 'image/png'
 			},
 			{
-				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINTh}/site-banner.png`,
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINT}/site-banner.png`,
 				width: 1578,
 				height: 806,
 				alt: 'Yin\'s Dashboard',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 			' profile and prompts. You can add and edit chatbot personas for Yin.',
 		images: [
 			{
-				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINTh}/site-banner.png`,
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINT}/site-banner.png`,
 				width: 1578,
 				height: 806,
 				alt: 'Yin\'s Dashboard',
