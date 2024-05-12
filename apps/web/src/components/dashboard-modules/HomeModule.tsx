@@ -4,20 +4,27 @@ import {
 	Text
 } from '@chakra-ui/react';
 import {useQuery} from '@tanstack/react-query';
-import {configLazy} from '../../services/config';
-import axios from 'axios';
-import {formatDistance} from 'date-fns';
+import {configLazy} from '../../services/config.service';
+import {formatDistanceStrict} from 'date-fns';
 import {useSearchParams} from 'next/navigation';
+import {AiOutlineOpenAI} from 'react-icons/ai';
+
+import Image from 'next/image';
+import UserProfileIcon from '../gallery/UserProfileIcon';
+import BackendService from '../../services/backend.service';
 
 type ImageGalleryRenderImageProps = {
 	url: string
 }
 
+const QUERY_KEY = 'recent/image-prompts';
+
 function ImageGalleryRenderImage({url}: ImageGalleryRenderImageProps) {
 	const [ImageUrl, setImageUrl] = useState('');
 	useEffect(() => {
+		const config = configLazy();
 		const ex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.jpg/;
-		const baseUrl = 'https://yin-storage-dev.s3.eu-central-1.amazonaws.com';
+		const baseUrl = config.yin.storageUrl;
 		if (ex.test(url)) {
 			setImageUrl(`${baseUrl}/${url}`);
 		} else {
@@ -29,19 +36,18 @@ function ImageGalleryRenderImage({url}: ImageGalleryRenderImageProps) {
 									 height={196} /></Box>;
 }
 
-function ImageGallery() {
+function HomeModule() {
 	const searchParams = useSearchParams();
 
 	async function api() {
-		const config = configLazy();
-		return axios.get(`${config.vercel.backendUrl}/recent/image-prompts`);
+		return BackendService.get(QUERY_KEY);
 	}
 
 	const [Data, setData] = useState([]);
 
 	// Queries
 	const query = useQuery({
-		queryKey: ['recent/image-prompts'],
+		queryKey: [QUERY_KEY],
 		queryFn: api
 	});
 
@@ -75,17 +81,36 @@ function ImageGallery() {
 						<Text color={'#ffffff87'}>{o.imageGeneratePrompt.prompt}</Text>
 					</Box>}
 				</Box>
-				<Box mt={4}>
-					{o.user.username && <Text color={'#ffffff60'}
-																		fontSize={'sm'}>@{o.user.username} • {formatDistance(
-						o.createdAt,
-						new Date(),
-						{addSuffix: true})
-					}</Text>}</Box>
-
+				<Box mt={4} style={{display: 'flex', alignItems: 'center'}}>
+					<Box>
+						{o.imageGeneratePrompt.prodiaSetting && <Image
+							src={'/assets/logos/ProdiaLogo.webp'}
+							alt={'prodia logo'}
+							width={48} height={48} style={{opacity: 0.6}} />}
+						{o.imageGeneratePrompt.openaiSetting &&
+							<AiOutlineOpenAI size={32} color={'#fff'} opacity={0.6} />}
+					</Box>
+					<Box style={{flex: 1, flexGrow: 1, textAlign: 'center'}}>
+						{o.imageGeneratePrompt?.openaiSetting?.model &&
+							<Text color={'#fff'}
+										opacity={0.6}>{o.imageGeneratePrompt.openaiSetting.model}</Text>}
+						{o.imageGeneratePrompt?.prodiaSetting?.model &&
+							<Text color={'#fff'}
+										opacity={0.6}>{o.imageGeneratePrompt.prodiaSetting.model}</Text>}
+						<Text fontSize={'sm'} color={'#fff'} opacity={0.3}>
+							{formatDistanceStrict(
+								o.createdAt,
+								new Date(),
+								{addSuffix: false})
+							}</Text>
+					</Box>
+					<Box>
+						<UserProfileIcon user={o.user} createdAt={o.createdAt} />
+					</Box>
+				</Box>
 			</Box>)}
 		</Box>
 	</Box>;
 }
 
-export default ImageGallery;
+export default HomeModule;

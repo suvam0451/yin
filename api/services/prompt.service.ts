@@ -13,7 +13,9 @@ class PromptService {
 							include: {
 								mediaAsset: true
 							}
-						}
+						},
+						openaiSetting: true,
+						prodiaSetting: true
 					}
 				},
 				user: {
@@ -24,11 +26,12 @@ class PromptService {
 			},
 			take: 6,
 			orderBy: {
-				createdAt: "desc"
+				createdAt: 'desc'
 			}
 		});
 
-		return successWithData(res);
+		// NOTE: privacy issues
+		return successWithData([]);
 	}
 }
 

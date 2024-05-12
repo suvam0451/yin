@@ -1,6 +1,6 @@
 import {Box} from '@chakra-ui/react';
 import styled from 'styled-components';
-import YinFooter from '../components/footers/Yin';
+import YinFooter from '../components/homepage/YinFooter';
 import React from 'react';
 import CommonBanner from '../components/banners/Common';
 

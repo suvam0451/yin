@@ -2,7 +2,7 @@ import {Box, Input, Text, Tooltip} from '@mantine/core';
 import {FaPlusCircle, FaRegQuestionCircle} from 'react-icons/fa';
 import {Button} from '@chakra-ui/react';
 import {usePersonaFormContext} from '../../state/personaFormContext';
-import BackendService from '../../../services/backend';
+import BackendService from '../../services/backend.service';
 import {useYinAuthContext} from '../../state/authContext';
 import PersonaPreview from './PersonaPreview';
 import InstructionItem from './InstructionItem';

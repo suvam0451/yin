@@ -1,46 +1,30 @@
-const botClientId = process.env.DISCORD_BOT_CLIENT_ID || ""
-const botClientSecret = process.env.DISCORD_BOT_CLIENT_SECRET || ""
-const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || ""
-const openaiApiKey = process.env.OPENAI_API_KEY || ""
-const vercelBackendUrl = process.env.VERCEL_API_ENDPOINT || ""
-const jwtSecret = process.env.JWT_SECRET || ""
-
-export const config = {
-  discord: {
-    clientId: botClientId,
-    clientSecret: botClientSecret,
-    clientToken: botClientToken
-  },
-  openai: {
-    apiKey: openaiApiKey
-  },
-  vercel: {
-    backendUrl: vercelBackendUrl
-  }
-}
-
+/**
+ * Loan config on demand
+ */
 export function configLazy() {
-  const botClientId = process.env.DISCORD_BOT_CLIENT_ID || ""
-  const botClientSecret = process.env.DISCORD_BOT_CLIENT_SECRET || ""
-  const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || ""
-  const openaiApiKey = process.env.OPENAI_API_KEY || ""
-  const vercelBackendUrl = process.env.VERCEL_API_ENDPOINT || ""
-  const jwtSecret = process.env.JWT_SECRET || ""
+	const openaiApiKey = process.env.OPENAI_API_KEY || '';
+	const vercelBackendUrl = process.env.VERCEL_API_ENDPOINT || '';
+	const jwtSecret = process.env.JWT_SECRET || '';
+	const defaultContext = process.env.DEFAULT_OPENAI_CONTEXT || '';
+	const prodiaApiKey = process.env.PRODIA_API_KEY || '';
+	const storageBucketName = process.env.AWS_STORAGE_BUCKET_NAME || '';
 
-  return {
-    discord: {
-      clientId: botClientId,
-      clientSecret: botClientSecret,
-      clientToken: botClientToken
-    },
-    openai: {
-      apiKey: openaiApiKey
-    },
-    vercel: {
-      backendUrl: vercelBackendUrl
-    },
-    app: {
-      jwtSecret
-    }
-  }
+	return {
+		openai: {
+			apiKey: openaiApiKey,
+			defaultContext
+		},
+		vercel: {
+			backendUrl: vercelBackendUrl
+		},
+		app: {
+			jwtSecret
+		},
+		prodia: {
+			apiKey: prodiaApiKey
+		},
+		aws: {
+			storageBucketName
+		}
+	};
 }

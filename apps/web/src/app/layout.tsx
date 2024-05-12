@@ -1,27 +1,48 @@
-'use client';
-
 import {Inter} from 'next/font/google';
-import {ChakraProvider} from '@chakra-ui/react';
 import {
-	QueryClient,
-	QueryClientProvider
+	QueryClient
 } from '@tanstack/react-query';
-import {createTheme, MantineProvider} from '@mantine/core';
+import {createTheme} from '@mantine/core';
+
 
 import './globals.css';
-import StyledComponentsRegistry from '../lib/registry';
 
 const inter = Inter({subsets: ['latin']});
-const queryClient = new QueryClient();
 
 // Create a client
 import '@mantine/core/styles.css';
 import React from 'react';
+import {Metadata} from 'next';
 
-const theme = createTheme({
-	/** Put your mantine theme override here */
-});
-
+export const metadata: Metadata = {
+	title: 'Yin | Chatbot and Prompt Assistant',
+	description:
+		'Create and interact with multiple chatbot personas ◆ Generate AI images' +
+		' using Dall-E and Stable Diffusion ◆ Customise your assistant with unique personality.',
+	openGraph: {
+		url: 'https://yin.suvam.io',
+		title: 'Yin | Chatbot and Prompt Assistant',
+		description: 'Create and interact with multiple chatbot personas ◆ Generate AI images using Dall-E and Stable Diffusion ◆ Customise your assistant with unique personality.',
+		images: [
+			{
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINT}/site-banner.png`,
+				width: 1578,
+				height: 806,
+				alt: 'Project Yin',
+				type: 'image/png'
+			},
+			{
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINT}/site-banner.png`,
+				width: 1578,
+				height: 806,
+				alt: 'Project Yin',
+				type: 'image/png'
+			}
+		],
+		type: 'website',
+		siteName: 'Project Yin'
+	}
+};
 
 export default function RootLayout({
 	children
@@ -31,15 +52,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 		<body className={inter.className}>
-		<QueryClientProvider client={queryClient}>
-			<ChakraProvider>
-				<MantineProvider theme={theme} defaultColorScheme={'dark'}>
-					<StyledComponentsRegistry>
-						{children}
-					</StyledComponentsRegistry>
-				</MantineProvider>
-			</ChakraProvider>
-		</QueryClientProvider>
+		{children}
 		</body>
 		</html>
 	);

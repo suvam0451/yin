@@ -32,6 +32,11 @@ export const OpenaiPersonaUpdateDTO = z.object({
 	instructions: z.array(z.string())
 });
 
+export const UuidDto = z.object({
+	uuid: z.string()
+});
+
+export type UuidDtoType = z.infer<typeof UuidDto>
 
 export const DiscordOAuthResponseDTO = z.object({
 	token_type: z.string(),
@@ -60,7 +65,9 @@ class UserService {
 							include: {
 								mediaAsset: true
 							}
-						}
+						},
+						openaiSetting: true,
+						prodiaSetting: true
 					}
 				}
 			}
@@ -77,7 +84,14 @@ class UserService {
 				uuid: auth.sub
 			},
 			include: {
-				discordUsers: true
+				discordUsers: {
+					select: {
+						id: true,
+						username: true,
+						avatar: true,
+						userId: true
+					}
+				}
 			}
 		});
 
@@ -161,6 +175,36 @@ class UserService {
 
 		const data = await userRepo.getOpenaiChatbotPersonas(u.uuid);
 		return successWithData(data);
+	}
+
+	static async removeDefaultOpenaiPersona(auth: TokenType) {
+		const u = await UserRepository.get(auth.sub);
+		if (!u) return badRequest('user not found');
+
+		try {
+			await UserRepository.removeDefaultOpenaiPersona(u.uuid);
+			return successWithData({});
+		} catch (e) {
+			return badRequest('unknown error occurred');
+		}
+	}
+
+	static async updateDefaultOpenaiPersona(auth: TokenType, body: UuidDtoType) {
+		const u = await UserRepository.get(auth.sub);
+		if (!u) return badRequest('user not found');
+
+		try {
+			const match = await UserRepository.updateDefaultOpenaiPersona(
+				u.uuid, body.uuid);
+
+			if (!match) {
+				return badRequest('no matching persona found');
+			} else {
+				return successWithData(match);
+			}
+		} catch (e) {
+			return badRequest('unknown error occurred');
+		}
 	}
 }
 
