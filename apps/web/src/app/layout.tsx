@@ -25,21 +25,21 @@ export const metadata: Metadata = {
 		description: 'Create and interact with multiple chatbot personas ◆ Generate AI images using Dall-E and Stable Diffusion ◆ Customise your assistant with unique personality.',
 		images: [
 			{
-				url: 'https://yin-storage-dev.s3.eu-central-1.amazonaws.com/site-banner.png',
-				width: 1098,
-				height: 1486,
-				alt: 'Og Image Alt',
-				type: 'image/jpeg'
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINTh}/site-banner.png`,
+				width: 1578,
+				height: 806,
+				alt: 'Project Yin',
+				type: 'image/png'
 			},
 			{
-				url: 'https://yin-storage-dev.s3.eu-central-1.amazonaws.com/site-banner.png',
-				width: 1098,
-				height: 1486,
-				alt: 'Og Image Alt Second',
-				type: 'image/jpeg'
+				url: `${process.env.NEXT_PUBLIC_STORAGE_ENDPOINTh}/site-banner.png`,
+				width: 1578,
+				height: 806,
+				alt: 'Project Yin',
+				type: 'image/png'
 			}
 		],
-		siteName: 'SiteName'
+		siteName: 'Project Yin'
 	}
 };
 
