@@ -57,7 +57,7 @@ Plz contact dev to enable me for your server ^^`)
 			const avatarUrl = user.avatar;
 
 			const prompt = body.options.get('prompt')?.value;
-			const model = body.options.get('model')?.value || 'dall-e-2';
+			const model = body.options.get('model')?.value || 'sdxl';
 			const size = body.options.get('size')?.value || '256x256';
 			const quality = body.options.get('quality')?.value || 'standard';
 

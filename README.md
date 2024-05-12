@@ -17,3 +17,9 @@ npx prisma db execute --url "{REMOTE_SERVER}" --file backward.sql
 CREATE ROLE admin WITH LOGIN PASSWORD '<password within quotes>'
 ALTER ROLE admin CREATEDB; 
 ```
+
+### Running the bot from a container
+
+```shell
+pm2 start npm --name "yin" -- start
+```
