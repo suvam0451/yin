@@ -30,7 +30,8 @@ class PromptService {
 			}
 		});
 
-		return successWithData(res);
+		// NOTE: privacy issues
+		return successWithData([]);
 	}
 }
 
