@@ -60,7 +60,9 @@ class UserService {
 							include: {
 								mediaAsset: true
 							}
-						}
+						},
+						openaiSetting: true,
+						prodiaSetting: true
 					}
 				}
 			}
@@ -77,7 +79,14 @@ class UserService {
 				uuid: auth.sub
 			},
 			include: {
-				discordUsers: true
+				discordUsers: {
+					select: {
+						id: true,
+						username: true,
+						avatar: true,
+						userId: true
+					}
+				}
 			}
 		});
 

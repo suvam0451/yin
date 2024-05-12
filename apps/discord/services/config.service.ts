@@ -1,42 +1,23 @@
-const botClientId = process.env.DISCORD_BOT_CLIENT_ID || ""
-const botClientSecret = process.env.DISCORD_BOT_CLIENT_SECRET || ""
-const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || ""
-const openaiApiKey = process.env.OPENAI_API_KEY || ""
-const vercelBackendUrl = process.env.VERCEL_API_ENDPOINT || ""
+import * as dotenv from 'dotenv';
+import path from 'path';
 
-export const config = {
-  discord: {
-    clientId: botClientId,
-    clientSecret: botClientSecret,
-    clientToken: botClientToken
-  },
-  openai: {
-    apiKey: openaiApiKey
-  },
-  vercel: {
-    backendUrl: vercelBackendUrl
-  }
-}
+// required to run the slash command update script
+dotenv.config({path: path.join(__dirname, '../../../.env')});
 
 export function configLazy() {
-  const botClientId = process.env.DISCORD_BOT_CLIENT_ID || ""
-  const botClientSecret = process.env.DISCORD_BOT_CLIENT_SECRET || ""
-  const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || ""
-  const openaiApiKey = process.env.OPENAI_API_KEY || ""
-  const vercelBackendUrl = process.env.VERCEL_API_ENDPOINT || ""
+	const botClientId = process.env.DISCORD_BOT_CLIENT_ID || '';
+	const botClientSecret = process.env.DISCORD_BOT_CLIENT_SECRET || '';
+	const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || '';
+	const backendUrl = process.env.BACKEND_ENDPOINT || '';
 
-
-  return {
-    discord: {
-      clientId: botClientId,
-      clientSecret: botClientSecret,
-      clientToken: botClientToken
-    },
-    openai: {
-      apiKey: openaiApiKey
-    },
-    vercel: {
-      backendUrl: vercelBackendUrl
-    }
-  }
+	return {
+		discord: {
+			clientId: botClientId,
+			clientSecret: botClientSecret,
+			clientToken: botClientToken
+		},
+		yin: {
+			backendUrl: backendUrl
+		}
+	};
 }

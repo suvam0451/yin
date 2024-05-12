@@ -1,7 +1,7 @@
 import {Select, Box, Text, Input, Tooltip, Divider} from '@mantine/core';
 import {usePersonaFormContext} from '../../state/personaFormContext';
 import {useYinAuthContext} from '../../state/authContext';
-import BackendService from '../../../services/backend';
+import BackendService from '../../services/backend.service';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {IoMdRefresh} from 'react-icons/io';
@@ -17,7 +17,7 @@ import {Button} from '@chakra-ui/react';
 import InstructionItem from './InstructionItem';
 
 
-const OpenaiChatbotPersona = z.object({
+export const OpenaiChatbotPersona = z.object({
 	uuid: z.string(),
 	name: z.string(),
 	notes: z.string(),
@@ -27,7 +27,7 @@ const OpenaiChatbotPersona = z.object({
 	}))
 });
 
-const OpenaiChatbotPersonaBackendType = z.object({
+export const OpenaiChatbotPersonaBackendType = z.object({
 	data: z.array(z.object({
 		openaiChatbotPersona: OpenaiChatbotPersona
 	}))
@@ -161,7 +161,6 @@ function PersonaEdit() {
 							refetch().then((res) => {
 								console.log(res);
 							});
-
 						}} />
 				</React.Fragment>}
 			/>

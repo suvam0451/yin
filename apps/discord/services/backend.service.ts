@@ -4,7 +4,7 @@ import axios from "axios"
 class VercelBackend {
   static async post(path: string, body: any) {
     const config = configLazy()
-    const baseUrl = config.vercel.backendUrl;
+    const baseUrl = config.yin.backendUrl;
     try {
       return (await axios.post(`${baseUrl}${path}`, body)).data
     } catch (e) {

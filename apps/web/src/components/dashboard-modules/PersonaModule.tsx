@@ -1,13 +1,13 @@
 import {Box, Text} from '@mantine/core';
 import {useState} from 'react';
 
-import PersonaEdit from './personas/PersonaEdit';
-import PersonaCreate from './personas/PersonaCreate';
-import WithPersonaFormContext from '../state/personaFormContext';
+import PersonaEdit from '../personas/PersonaEdit';
+import PersonaCreate from '../personas/PersonaCreate';
+import WithPersonaFormContext from '../../state/personaFormContext';
 import {useSearchParams} from 'next/navigation';
 import styled from 'styled-components';
 
-function PersonaEditor() {
+function PersonaModule() {
 	const searchParams = useSearchParams();
 
 	const [IsFirstTabOpen, setIsFirstTabOpen] = useState(true);
@@ -69,4 +69,4 @@ function PersonaEditor() {
 	</Box>;
 }
 
-export default PersonaEditor;
+export default PersonaModule;

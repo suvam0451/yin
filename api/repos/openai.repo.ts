@@ -35,6 +35,7 @@ class OpenaiRepository {
 	 */
 	static async updateOpenaiPersona(uuid: string,
 		{
+			name,
 			notes,
 			instructions
 		}: z.infer<typeof OpenaiPersonaCreateDTO>) {
@@ -57,6 +58,7 @@ class OpenaiRepository {
 					uuid: match.uuid
 				},
 				data: {
+					name,
 					notes
 				}
 			});

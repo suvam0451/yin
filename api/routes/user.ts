@@ -44,7 +44,7 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 					const auth = JwtService.verifyToken(event.headers['authorization']);
 					if (!auth) return badRequest('auth token invalid');
 
-					return UserService.getOpenaiChatbotPersona(auth)
+					return UserService.getOpenaiChatbotPersona(auth);
 				}
 				default: {
 					return routeNotFound();
@@ -75,14 +75,19 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 
 					return UserService.createOpenaiChatbotPersona(auth, bodyData);
 				}
+				case 'openai-persona-default': {
+					const auth = JwtService.verifyToken(event.headers['authorization']);
+					if (!auth) return badRequest('auth token invalid');
+				}
 				default: {
+
 					return routeNotFound();
 				}
 			}
 		}
-		case "PATCH": {
-			switch(resource) {
-				case "openai-persona": {
+		case 'PATCH': {
+			switch (resource) {
+				case 'openai-persona': {
 					const {
 						bodyValid,
 						bodyData,
@@ -100,8 +105,16 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 				}
 			}
 		}
-		case "OPTIONS": {
-			return successWithData({})
+		case 'OPTIONS': {
+			return successWithData({});
+		}
+		case 'DELETE': {
+			switch (resource) {
+				case 'openai-persona-default': {
+					const auth = JwtService.verifyToken(event.headers['authorization']);
+					if (!auth) return badRequest('auth token invalid');
+				}
+			}
 		}
 		default: {
 			return routeNotFound();

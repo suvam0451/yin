@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect} from 'react';
-import LocalStorageService from '../../services/local-storage';
-import BackendService from '../../services/backend';
+import LocalStorageService from '../services/local-storage.service';
+import BackendService from '../services/backend.service';
 import {z} from 'zod';
 
 

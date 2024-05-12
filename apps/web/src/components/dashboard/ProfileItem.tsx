@@ -1,7 +1,7 @@
 import {Avatar, Box} from '@mantine/core';
 import {useYinAuthContext} from '../../state/authContext';
 import {useEffect, useState} from 'react';
-import DiscordService from '../../../services/discord.service';
+import DiscordService from '../../services/discord.service';
 import Image from 'next/image';
 import {FaBell, FaDiscord} from 'react-icons/fa';
 import {Popover, Text, Button} from '@mantine/core';

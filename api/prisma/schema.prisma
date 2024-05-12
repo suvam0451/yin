@@ -34,13 +34,32 @@ model UserImageGeneratePrompt {
   @@map("user_image_generate_prompt")
 }
 
+model ReplyGeneratePrompt {
+  uuid   String                     @id @default(uuid())
+  prompt String
+  result ReplyGeneratePromptResult?
+
+  @@map("reply_generate_prompt")
+}
+
+model ReplyGeneratePromptResult {
+  uuid String @id @default(uuid())
+
+  prompt   ReplyGeneratePrompt @relation(fields: [promptId], references: [uuid])
+  promptId String              @unique @map("image_generate_prompt_id")
+
+  @@map("reply_generate_prompt_result")
+}
+
 model ImageGeneratePrompt {
   uuid          String                            @id @default(uuid())
   prompt        String
   openaiSetting ImageGeneratePromptOpenaiSetting?
-  results       ImageGeneratePromptResult[]
-  userPrompts   UserImageGeneratePrompt[]
-  createdAt     DateTime                          @default(now()) @map("created_at")
+  prodiaSetting ImageGeneratePromptProdiaSetting?
+
+  results     ImageGeneratePromptResult[]
+  userPrompts UserImageGeneratePrompt[]
+  createdAt   DateTime                    @default(now()) @map("created_at")
 
   @@map("image_generate_prompt")
 }
@@ -54,6 +73,23 @@ model ImageGeneratePromptOpenaiSetting {
   promptId String              @unique @map("image_generate_prompt_id")
 
   @@map("image_generate_prompt_openai_setting")
+}
+
+model ImageGeneratePromptProdiaSetting {
+  id             Int                 @id @default(autoincrement())
+  model          String
+  upscale        Boolean             @default(false)
+  negativePrompt String?             @map("negative_prompt")
+  cfgScale       Int?                @map("cfg_scale")
+  sampler        String?
+  width          Int?
+  height         Int?
+  steps          Int?
+  stylePreset    String?             @map("style_preset")
+  prompt         ImageGeneratePrompt @relation(fields: [promptId], references: [uuid])
+  promptId       String              @unique @map("image_generate_prompt_id")
+
+  @@map("iage_generate_prompt_prodia_setting")
 }
 
 model MediaAsset {
@@ -95,8 +131,9 @@ model DiscordUser {
 }
 
 model DiscordGuild {
-  id   Int    @unique
-  name String
+  id        Int     @unique
+  name      String
+  isAllowed Boolean @default(false) @map("is_allowed")
 
   @@map("discord_guild")
 }
@@ -120,6 +157,7 @@ model UserOpenaiChatbotPersona {
   userId                 String               @map("user_id")
   openaiChatbotPersona   OpenaiChatbotPersona @relation(fields: [openaiChatbotPersonaId], references: [uuid])
   openaiChatbotPersonaId String               @map("openai_chatbot_persona_id")
+  selected               Boolean              @default(false)
 
   @@map("user_openai_chatbot_persona")
 }
