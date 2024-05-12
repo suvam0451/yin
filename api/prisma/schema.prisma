@@ -89,7 +89,7 @@ model ImageGeneratePromptProdiaSetting {
   prompt         ImageGeneratePrompt @relation(fields: [promptId], references: [uuid])
   promptId       String              @unique @map("image_generate_prompt_id")
 
-  @@map("iage_generate_prompt_prodia_setting")
+  @@map("image_generate_prompt_prodia_setting")
 }
 
 model MediaAsset {
@@ -131,7 +131,8 @@ model DiscordUser {
 }
 
 model DiscordGuild {
-  id        Int     @unique
+  id        Int     @id @default(autoincrement())
+  guildId   String  @unique @map("guild_id")
   name      String
   isAllowed Boolean @default(false) @map("is_allowed")
 

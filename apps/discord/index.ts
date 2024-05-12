@@ -3,17 +3,18 @@ import {
 	GatewayIntentBits,
 	IntentsBitField
 } from 'discord.js';
-import * as dotenv from 'dotenv';
 import guildCreateHandler from './handlers/guildCreate';
 import messageCreateHandler from './handlers/messageCreate';
 import interactionCreateHandler from './handlers/interactionCreate';
 import readyHandler from './handlers/readyHandler';
+import {configLazy} from './services/config.service';
 
-dotenv.config({path: './.env'});
 
-const botClientToken = process.env.DISCORD_BOT_CLIENT_TOKEN || '';
 
 async function main() {
+	const config = configLazy()
+	const botClientToken = config.discord.clientToken
+
 	const bot = new Client({
 		intents: [
 			// GatewayIntentBits.Guilds,

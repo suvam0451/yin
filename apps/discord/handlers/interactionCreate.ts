@@ -1,5 +1,6 @@
 import {CacheType, EmbedBuilder, Interaction} from 'discord.js';
 import VercelBackend from '../services/backend.service';
+import GuildService from '../services/guild.service';
 
 async function interactionCreateHandler(body: Interaction<CacheType>) {
 	if (body.isChatInputCommand()) {
@@ -41,6 +42,16 @@ Plz contact dev to enable me for your server ^^`)
 
 			await body.reply({embeds: [exampleEmbed], ephemeral: false});
 		} else if (commandName === 'image') {
+			await body.reply('Working on it...');
+
+			const {
+				success,
+				reason
+			} = await GuildService.isAllowedBotAccess(body.guildId);
+			if (!success) {
+				return await body.editReply(reason);
+			}
+
 			const userId = user.id;
 			const userDisplayName = user.displayName;
 			const username = user.username;
@@ -52,7 +63,7 @@ Plz contact dev to enable me for your server ^^`)
 			const quality = body.options.get('quality')?.value || 'standard';
 
 			try {
-				await body.reply('Working on it...');
+
 				const retval = await VercelBackend.post('/discord/image-prompt', {
 					guildId,
 					userId,

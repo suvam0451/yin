@@ -8,10 +8,11 @@ import {
 import UserService, {
 	DiscordUserAuthDTO,
 	OpenaiPersonaCreateDTO, OpenaiPersonaUpdateDTO,
-	UserGalleryGetDTO
+	UserGalleryGetDTO, UuidDto, UuidDtoType
 } from '../services/user.service';
 import JwtService from '../services/jwt.service';
 import {z} from 'zod';
+import userService from '../services/user.service';
 
 export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 	const resource = event.pathParameters?.resource;
@@ -75,12 +76,20 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 
 					return UserService.createOpenaiChatbotPersona(auth, bodyData);
 				}
-				case 'openai-persona-default': {
+				case 'default-openai-persona': {
+					const {
+						bodyValid,
+						bodyData,
+						res
+					} = validateBody<UuidDtoType>(event.body, UuidDto);
+					if (!bodyValid || !bodyData) return res;
+
 					const auth = JwtService.verifyToken(event.headers['authorization']);
 					if (!auth) return badRequest('auth token invalid');
+
+					return userService.updateDefaultOpenaiPersona(auth, bodyData);
 				}
 				default: {
-
 					return routeNotFound();
 				}
 			}
@@ -110,9 +119,13 @@ export async function getGallery(event: APIGatewayProxyEvent): Promise<APIGatewa
 		}
 		case 'DELETE': {
 			switch (resource) {
-				case 'openai-persona-default': {
+				case 'default-openai-persona': {
 					const auth = JwtService.verifyToken(event.headers['authorization']);
 					if (!auth) return badRequest('auth token invalid');
+					return userService.removeDefaultOpenaiPersona(auth);
+				}
+				default: {
+					return routeNotFound();
 				}
 			}
 		}

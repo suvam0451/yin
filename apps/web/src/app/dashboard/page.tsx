@@ -11,8 +11,6 @@ import YinDashboard from '../../components/banners/YinDashboard';
 import PersonaModule from '../../components/dashboard-modules/PersonaModule';
 import SettingsModule from '../../components/dashboard-modules/SettingsModule';
 import ProviderContainer from '../../container/ProviderContainer';
-import YinDashboardForOpengraph
-	from '../../components/banners/YinDashboardForOpengraph';
 
 function DashboardPage() {
 	return <main className="flex min-h-screen flex-col darkmode_0dp">
@@ -20,8 +18,7 @@ function DashboardPage() {
 			<ProjectLandingPageContainer>
 				<WithYinAuthContext>
 					<DashboardHeaderBar />
-					<YinDashboardForOpengraph/>
-					{/*<YinDashboard />*/}
+					<YinDashboard />
 					<HomeModule />
 					<PersonaModule />
 					<SettingsModule />

@@ -32,23 +32,12 @@ package:
   individually: false
   include:
     - "node_modules/.prisma/**"
-#  exclude:
-#    - "node_modules/@prisma/engines/**"
-#    - "node_modules/prisma/libquery_engine-*"
-#    - "node_modules/.cache/prisma/**"
-#    - "node_modules/.prisma/client/libquery_engine-*"
-#    - '!node_modules/.prisma/client/libquery_engine-rhel-*'
 
 custom:
   webpack:
     webpackConfig: webpack.config.js
     includeModules: false
     packager: 'npm'
-#    packagerOptions:
-#      scripts:
-#        - prisma generate
-#        - find . -name "libquery_engine-*" -not -name "libquery_engine-rhel-openssl-*" | xargs rm
-
 functions:
   discordAskPrompt:
     handler: routes/chat-prompt.main
@@ -73,4 +62,10 @@ functions:
     events:
       - httpApi:
           path: /recent/image-prompts # discord-oauth
+          method: any
+  getGuild:
+    handler: routes/global.getGuildPermissions
+    events:
+      - httpApi:
+          path: /guild/{id} # discord-oauth
           method: any

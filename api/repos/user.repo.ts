@@ -11,6 +11,52 @@ class UserRepository {
 		});
 	}
 
+	static async removeDefaultOpenaiPersona(userId: string) {
+		const prisma = DBClient.getInstance().prisma;
+
+		await prisma.userOpenaiChatbotPersona.updateMany({
+			where: {
+				userId
+			},
+			data: {
+				selected: false
+			}
+		});
+		return;
+	}
+
+	static async updateDefaultOpenaiPersona(userId: string, personaId: string) {
+		const prisma = DBClient.getInstance().prisma;
+
+		await prisma.userOpenaiChatbotPersona.updateMany({
+			where: {
+				userId,
+				openaiChatbotPersonaId: {
+					not: personaId
+				}
+			},
+			data: {
+				selected: false
+			}
+		});
+
+		await prisma.userOpenaiChatbotPersona.updateMany({
+			where: {
+				userId,
+				openaiChatbotPersonaId: personaId
+			},
+			data: {
+				selected: true
+			}
+		});
+
+		return prisma.userOpenaiChatbotPersona.findFirst({
+			where: {
+				selected: true
+			}
+		});
+	}
+
 	static async getOpenaiChatbotPersonas(uuid: string) {
 		const prisma = DBClient.getInstance().prisma;
 

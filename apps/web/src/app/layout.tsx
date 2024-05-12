@@ -39,6 +39,7 @@ export const metadata: Metadata = {
 				type: 'image/png'
 			}
 		],
+		type: 'website',
 		siteName: 'Project Yin'
 	}
 };
