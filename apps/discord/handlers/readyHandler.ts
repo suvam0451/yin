@@ -12,7 +12,7 @@ async function readyHandler(bot: Client<boolean>) {
 		activities: [{
 			'name': 'Something',
 			'type': 4,
-			'state': 'Stargazing on this tranquil moonlit night'
+			'state': 'Deba-kun\'s imaginary girlfriend ⸜(｡˃ ᵕ ˂ )⸝♡'
 		}]
 	});
 
