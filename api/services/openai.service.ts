@@ -41,7 +41,7 @@ export class OpenAiService {
 
 			const response = await client.chat.completions.create(
 				{
-					model: 'gpt-3.5-turbo', messages: [{
+					model: 'gpt-4o', messages: [{
 						role: 'system',
 						content: config.openai.defaultContext
 					}, {

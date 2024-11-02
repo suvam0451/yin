@@ -1,5 +1,4 @@
 import {Client} from 'discord.js';
-import axios from 'axios';
 import {configLazy} from '../services/config.service';
 
 async function readyHandler(bot: Client<boolean>) {
@@ -8,12 +7,14 @@ async function readyHandler(bot: Client<boolean>) {
 	const config = configLazy();
 
 	bot.user.setPresence({
-		status: "online",
-		activities: [{
-			'name': 'Something',
-			'type': 4,
-			'state': 'Deba-kun\'s imaginary girlfriend ⸜(｡˃ ᵕ ˂ )⸝♡'
-		}]
+		status: 'online',
+		activities: [
+			{
+				name: 'Something',
+				type: 4,
+				state: "Deba-kun's imaginary girlfriend ⸜(｡˃ ᵕ ˂ )⸝♡",
+			},
+		],
 	});
 
 	// try {
